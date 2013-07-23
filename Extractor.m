@@ -22,11 +22,11 @@ static NSString* composeEntryPointPath(NSString* packagePath, NSString* indexNam
 - (id) init
 {
 	if (self = [super init]) {
-	
-	//default to XHTML if there is nothing else
-		contentKind = NSXMLDocumentXHTMLKind;
+
+		//default to XHTML if there is nothing else
+		_contentKind = NSXMLDocumentXHTMLKind;
 	}
-		
+
 	return self;
 }
 
@@ -42,26 +42,26 @@ static NSString* composeEntryPointPath(NSString* packagePath, NSString* indexNam
 		m_resources = [[NSMutableSet set] retain];
 		m_resourceLookupTable = [[NSMutableDictionary dictionary] retain];
 	}
-	
+
 	NSData * webArchiveContent = [NSData dataWithContentsOfFile:pathToWebArchive];
 	WebArchive * archive = [[WebArchive alloc] initWithData:webArchiveContent];
-	
-	
+
+
 	/* Added method parseWebArchive to more easily deal with subframeArchives in a looping fashion
 	 Deal with main resource first...may or may not cover it all - Robert Covington artlythere@kagi.com
-	12/12/11
+	 12/12/11
 	 */
-	
+
 	[self parseWebArchive:archive ];
-	
-	 /*
+
+	/*
 	 Check for SubFrameArchives - catches anything left over...some sites using frames will
-	  invoke this and otherwise would generate only a single HTML index file
-	  - Robert Covington artlythere@kagi.com 12/12/11
+	 invoke this and otherwise would generate only a single HTML index file
+	 - Robert Covington artlythere@kagi.com 12/12/11
 	 */
-	
+
 	NSArray * subArchives = [archive subframeArchives];
-	
+
 	if (subArchives)
 	{
 		int i;
@@ -73,7 +73,7 @@ static NSString* composeEntryPointPath(NSString* packagePath, NSString* indexNam
 				[self parseWebArchive:nuArchive];
 			}
 		}
-		
+
 	}  /* end subArchive processing */
 	[archive release];
 }  /* end method */
@@ -82,12 +82,12 @@ static NSString* composeEntryPointPath(NSString* packagePath, NSString* indexNam
 -(void) parseWebArchive:(WebArchive *) archiveToParse
 {
 	/* Added method parseWebArchive to more easily deal with subframeArchives in a looping fashion
-	- Robert Covington artlythere@kagi.com
+	 - Robert Covington artlythere@kagi.com
 	 12/12/11
 	 */
 	m_mainResource = [[archiveToParse mainResource] retain];
 	[self addResource:m_mainResource];
-	
+
 	NSArray * subresources = [archiveToParse subresources];
 	if (subresources)
 	{
@@ -97,279 +97,202 @@ static NSString* composeEntryPointPath(NSString* packagePath, NSString* indexNam
 		{
 			resource = (WebResource*) [subresources objectAtIndex:i];
 			[self addResource:resource];
-		}	
-	}	
+		}
+	}
 }
 
 
 -(void) addResource:(WebResource *)resource
 {
 	[m_resources addObject:resource];
-	
+
 	//url of resource
 	NSURL* url = [resource URL];
 	NSString* absoluteString = [url absoluteString];
 	NSString* path = [url path];
-	
+
 	if(path != nil) {
 		//NSLog(@"resource url absoluteString = %s\n", [absoluteString cString] );
 		[m_resourceLookupTable setObject:resource forKey:absoluteString];
-		
+
 		//NSLog(@"resource url path = %s\n", [path cString] );
 		[m_resourceLookupTable setObject:resource forKey:path];
-		
+
 		//BOOL isFile = [url isFileURL];
 		//if (isFile)
 		//{
-			//todo
+		//todo
 		//}
 	}
 }
 
-- (NSString *) extractResources:(NSString *) path 
-{
+- (NSURL *)extractResourcesToURL:(NSURL *)url {
 	NSFileManager * fm = [NSFileManager defaultManager];
-	BOOL isDirectory = YES; 
-	
-	if ([fm fileExistsAtPath:path isDirectory:  &isDirectory])
+	NSNumber *isDirectory = nil;
+
+	if ([url checkResourceIsReachableAndReturnError:nil] && [url getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:nil] && [isDirectory boolValue])
 	{
-        //removeItemAtURL:error:
-		if ([fm removeFileAtPath:path handler:nil]==NO)
+		if (![fm removeItemAtURL:url error:nil])
 		{
 			NSLog(
 				  NSLocalizedStringFromTable(
-											 @"cannot delete", 
-											 @"InfoPlist", 
+											 @"cannot delete",
+											 @"InfoPlist",
 											 @"cannot delete file - path first param"
 											 ),
-				  path
+				  [url path]
 				  );
 			return nil;
 		}
 	}
-	
-    //createDirectoryAtURL:withIntermediateDirectories:attributes:error:
-	if ([fm createDirectoryAtPath:path attributes:nil]!=YES) 
+
+	if (![fm createDirectoryAtURL:url withIntermediateDirectories:YES attributes:nil error:nil])
 	{
 		NSLog(
 			  NSLocalizedStringFromTable(
-										 @"cannot create", 
-										 @"InfoPlist", 
+										 @"cannot create",
+										 @"InfoPlist",
 										 @"cannot create file - path first param"
 										 ),
-			  path
+			  [url path]
 			  );
 		return nil;
 	}
-	
-	NSEnumerator *enumerator = [m_resources objectEnumerator];
-	id value;
-	while ((value = [enumerator nextObject])) {
-		WebResource * resource = (WebResource*) value;
-		[self extractResource: resource packagePath:path];
-	}
-	
-	return composeEntryPointPath(path, [self entryFileName]);
+
+	for (WebResource *resource in m_resources)
+		[self extractResource:resource packageURL:url];
+
+	return [url URLByAppendingPathComponent:[self entryFileName]];
 }
 
-
-- (void) extractResource:(WebResource *) resource packagePath: (NSString*) path
+- (void) extractResource:(WebResource *)resource packageURL:(NSURL *)packageURL
 {
 	NSFileManager * fm = [NSFileManager defaultManager];
+
+	NSURL *url = [resource URL];
+	NSString * urlPath = [url path];
+	if ([urlPath isEqual:@"/"])
+		urlPath = @"/__index.html";
+
+	NSURL *fileURL = [packageURL URLByAppendingPathComponent:urlPath];
 	
-	NSString * urlPath = [[resource URL] path];
-	if ([urlPath isEqual:@"/"]) {
-		//spec case - main resource name is equals site name
-		urlPath=@"/__index.html";
-	}
+	NSURL *parent = [fileURL URLByDeletingLastPathComponent];
+	if (![parent checkResourceIsReachableAndReturnError:nil])
+		[fm createDirectoryAtURL:parent withIntermediateDirectories:YES attributes:nil error:nil];
 	
-	NSMutableString * filePath = [NSMutableString stringWithCapacity:[path length]+[urlPath length]];
-	[filePath appendString:path];
-	
-	NSArray * components = [urlPath componentsSeparatedByString:@"/"];
-	
-	int i;
-	for (i=0; i<[components count]; i++) {
-		NSString * fname = (NSString*) [components objectAtIndex:i];
-		
-		if ([fname length] > 0)	{
-			[filePath appendString:@"/"];
-			[filePath appendString:fname];
-			
-			if (i+1 == [components count]) {
-				//last path component - write file
-				[self outputResource:resource filePath:filePath packagePath:path];
-			} else {
-				//create directory
-				BOOL isDirectory = YES; 
-				if (![fm fileExistsAtPath:filePath isDirectory: &isDirectory] && [fm createDirectoryAtPath:filePath attributes:nil]!=YES) {
-					NSLog(
-						  NSLocalizedStringFromTable(
-													 @"cannot create", 
-													 @"InfoPlist", 
-													 @"cannot create file - path first param"
-													 ),
-						  filePath
-						  );
-					return;
-				}
-				
-			}
-		}
-		
-	}
+	[self outputResource:resource fileURL:fileURL packageURL:packageURL];
+
 }
 
-- (void) outputResource: (WebResource *) resource 
-			   filePath: (NSString*) filePath 
-			packagePath: (NSString*) packagePath
+- (void) outputResource:(WebResource *)resource
+			   fileURL:(NSURL *)fileURL
+			packageURL:(NSURL *)packageURL
 {
 	if (resource == m_mainResource) {
-		NSStringEncoding encoding;
-		if ([@"UTF-8" isEqualToString: [m_mainResource textEncodingName]]) {
-			encoding = NSUTF8StringEncoding;
-		} else {
-			encoding = NSISOLatin1StringEncoding;
-		}
-
-		NSString * source = [[[NSString alloc] initWithData:[resource data]
-																encoding:encoding] autorelease];
+		NSStringEncoding encoding = CFStringConvertEncodingToNSStringEncoding(CFStringConvertIANACharSetNameToEncoding((CFStringRef)[m_mainResource textEncodingName]));
 		
+		NSString * source = [[[NSString alloc] initWithData:[resource data]
+												   encoding:encoding] autorelease];
+
 		NSLog(
-			  NSLocalizedStringFromTable(@"resource encoding is", @"InfoPlist", @"Resource encoding"), 
+			  NSLocalizedStringFromTable(@"resource encoding is", @"InfoPlist", @"Resource encoding"),
 			  [resource textEncodingName]
-		);
+			  );
 		
 		NSError * err = nil;
 		NSXMLDocument * doc = [NSXMLDocument alloc];
 		doc = [doc initWithXMLString: source options: NSXMLDocumentTidyHTML error: &err];
-		
+
 		/*
 		 Returns the kind of document content for output.
-		- (NSXMLDocumentContentKind)documentContentKind
-		 
-		Discussion
-			Most of the differences among content kind have to do with the handling of content-less 
-			tags such as <br>. The valid NSXMLDocumentContentKind constants are 
-			NSXMLDocumentXMLKind, NSXMLDocumentXHTMLKind, NSXMLDocumentHTMLKind, 
-			and NSXMLDocumentTextKind.
-		*/
-		[doc setDocumentContentKind: contentKind];
-		
-		if (doc != nil)	{
+		 - (NSXMLDocumentContentKind)documentContentKind
+
+		 Discussion
+		 Most of the differences among content kind have to do with the handling of content-less
+		 tags such as <br>. The valid NSXMLDocumentContentKind constants are
+		 NSXMLDocumentXMLKind, NSXMLDocumentXHTMLKind, NSXMLDocumentHTMLKind,
+		 and NSXMLDocumentTextKind.
+		 */
+		[doc setDocumentContentKind:[self contentKind]];
+
+		if (doc)	{
 			[doc autorelease];
 			//process images
 			err = nil;
-			
-			NSArray* images = [doc nodesForXPath:@"descendant::node()[@src] | descendant::node()[@href]" 
+
+			NSArray* images = [doc nodesForXPath:@"descendant::node()[@src] | descendant::node()[@href]"
 										   error: &err];
-			if (err != nil) {
+			if (err) {
 				NSLog(@"%@",
 					  NSLocalizedStringFromTable(
-												 @"cannot execute xpath", 
-												 @"InfoPlist", 
+												 @"cannot execute xpath",
+												 @"InfoPlist",
 												 @"Xpath execute error"
 												 )
 					  );
 			} else {
-				int i;
-				for (i=0; i<[images count]; i++) {
-					
-					NSXMLElement * link = (NSXMLElement *) [images objectAtIndex: i];
+				//int i;
+				//for (i = 0; i < [images count]; i++) {
+				for (NSXMLElement * link in images) {
 					NSXMLNode * href = [link attributeForName: @"href"];
-					
-					if (href == nil) {
+
+					if (!href)
 						href = [link attributeForName: @"src"];
-					}
-					
-					if (href != nil) {
+
+					if (href) {
 						NSString * hrefValue = [href objectValue];
 						WebResource * res = [m_resourceLookupTable objectForKey: hrefValue];
 						
-						if (res != nil) {
+						if (res) {
 							//NSLog(@"%@", [[[res URL] path] substringFromIndex:1]);
-							
+
 							/* NSLog(@"%@",
-								  [NSString stringWithFormat:@"%@%@", [self URLPrepend], [[[res URL] path] substringFromIndex:1]]
-									  ); */
-							
+							 [NSString stringWithFormat:@"%@%@", [self URLPrepend], [[[res URL] path] substringFromIndex:1]]
+							 ); */
+
 							//[href setObjectValue: [[[res URL] path] substringFromIndex:1] ];
 							[href setObjectValue: [NSString stringWithFormat:@"%@%@", [self URLPrepend], [[[res URL] path] substringFromIndex:1]]];
 						}
 					}
 				}
 			}
-			
-			NSString * filePathXHtml = composeEntryPointPath(packagePath, [self entryFileName]);
-			
+
+			//NSString * filePathXHtml = composeEntryPointPath(packageURL, [self entryFileName]);
+			NSURL *fileURLXHtml = [packageURL URLByAppendingPathComponent:[self entryFileName]];
 			[doc setCharacterEncoding: @"UTF-8"];
-			
-			if (![[doc XMLDataWithOptions: NSXMLDocumentXHTMLKind] writeToFile: filePathXHtml atomically: NO]) {
+
+			if (![[doc XMLDataWithOptions: NSXMLDocumentXHTMLKind] writeToURL:fileURLXHtml atomically:NO]) {
 				NSLog(
 					  NSLocalizedStringFromTable(
-												 @"cannot write xhtml", 
-												 @"InfoPlist", 
+												 @"cannot write xhtml",
+												 @"InfoPlist",
 												 @"xhtml file error"
 												 ),
-					  filePath
+					  fileURL
 					  );
 			}
 		} else {
 			NSLog(
 				  NSLocalizedStringFromTable(
-											 @"error code", 
-											 @"InfoPlist", 
+											 @"error code",
+											 @"InfoPlist",
 											 @"extractor error. error code first param"
 											 ),
 				  [[err userInfo] valueForKey:NSLocalizedDescriptionKey]
 				  );
 		}
 	} else {
-		if (![[resource data] writeToFile:filePath atomically:NO]) {
+		if (![[resource data] writeToURL:fileURL atomically:NO]) {
 			NSLog(
-				NSLocalizedStringFromTable(
-										   @"cannot write xhtml", 
-										   @"InfoPlist", 
-										   @"xhtml file error"
-										   ),
-				filePath
-			);
+				  NSLocalizedStringFromTable(
+											 @"cannot write xhtml",
+											 @"InfoPlist",
+											 @"xhtml file error"
+											 ),
+				  fileURL
+				  );
 		}
 	}
-}
-
-- (void) setEntryFileName:(NSString *) filename;
-{
-	NSString *temp = [filename copy];
-    [entryFileName release];
-    entryFileName = temp;
-}
-
-- (NSString *) entryFileName;
-{
-    return entryFileName;
-}
-
-- (void) setURLPrepend:(NSString *) url
-{
-	NSString *temp = [url copy];
-    [URLPrepend release];
-    URLPrepend = temp;
-}
-
-- (NSString *) URLPrepend
-{
-	return URLPrepend;
-}
-
-- (void) setContentKind:(int) kind
-{
-	contentKind = kind;
-}
-
-- (int) contentKind
-{
-	return contentKind;
 }
 
 - (void) dealloc {

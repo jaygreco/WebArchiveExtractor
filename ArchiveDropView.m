@@ -152,9 +152,9 @@ static void logMessage(NSTextView* log, NSColor* color, NSString* message)
 					[extr setEntryFileName: indexFileName];
 					[extr setContentKind: type];
 					[extr setURLPrepend: URLPrepend];
-					NSString * mainResourcePath = [extr extractResources: outputPath];
+					NSURL * mainResourceURL = [extr extractResourcesToURL:[NSURL fileURLWithPath:outputPath]];
 					
-					[self logResult:[NSString stringWithFormat: NSLocalizedStringFromTable(@"extract success", @"InfoPlist", @"extract success 1=folder name 2=main file"), outputPath, mainResourcePath]];
+					[self logResult:[NSString stringWithFormat: NSLocalizedStringFromTable(@"extract success", @"InfoPlist", @"extract success 1=folder name 2=main file"), outputPath, [mainResourceURL path]]];
 					
 				}
 			}

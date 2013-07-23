@@ -22,13 +22,6 @@
 	//absolute path m_resourceLookupTable contains several keys for each resource 
 	// (as least 2: absolute and relative paths)
 	NSMutableDictionary * m_resourceLookupTable;
-	
-	/** the index file name */
-	NSString * entryFileName;
-	/** what kind of file to create (XML, XHTML, etc) */
-	int contentKind;
-	/** URL to add to the begining of the hrefs / srcs */
-	NSString * URLPrepend;
 }
 
 /**
@@ -47,32 +40,28 @@ added by Robert Covington to handle archives with subframeArchives
  */
 - (void) addResource:(WebResource *) resource;
 
+
 /**
  * extract to directory
  */
-- (NSString*) extractResources:(NSString*) path;
+- (NSURL *)extractResourcesToURL:(NSURL *)url;
 
 /**
  * private method
  * extract resource to existing packagePath (using outputResource)
  * (packagePath the same as path of extractResources message)
  */
-- (void) extractResource:(WebResource *) resource packagePath: (NSString*) path;
+- (void) extractResource:(WebResource *)resource packageURL:(NSURL *)url;
 
 /**
  * protected method
  * write resource data to filePath
  * Parent directory of filePath should exists
  */
--(void) outputResource:(WebResource *) resource filePath: (NSString*) filePath packagePath: (NSString*) packagePath;
+-(void) outputResource:(WebResource *)resource fileURL:(NSURL *)filePath packageURL:(NSURL *)packageURL;
 
-- (void) setEntryFileName:(NSString *) filename;
-- (NSString *) entryFileName;
-
-- (void) setContentKind:(int) kind;
-- (int) contentKind;
-
-- (void) setURLPrepend:(NSString *) url;
-- (NSString *) URLPrepend;
+@property (copy)	NSString *entryFileName;
+@property (assign)	int	contentKind;
+@property (copy)	NSString *URLPrepend;
 
 @end
