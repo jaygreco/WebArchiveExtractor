@@ -30,8 +30,7 @@ static NSString* composeEntryPointPath(NSString* packagePath, NSString* indexNam
 	return self;
 }
 
--(void) loadWebArchive:(NSString*) pathToWebArchive
-{
+- (void)loadWebArchiveAtURL:(NSURL *)webArchiveURL {
 	if (m_resources)
 	{
 		[m_resources removeAllObjects];
@@ -43,7 +42,7 @@ static NSString* composeEntryPointPath(NSString* packagePath, NSString* indexNam
 		m_resourceLookupTable = [[NSMutableDictionary dictionary] retain];
 	}
 
-	NSData * webArchiveContent = [NSData dataWithContentsOfFile:pathToWebArchive];
+	NSData * webArchiveContent = [NSData dataWithContentsOfURL:webArchiveURL];
 	WebArchive * archive = [[WebArchive alloc] initWithData:webArchiveContent];
 
 
@@ -76,6 +75,11 @@ static NSString* composeEntryPointPath(NSString* packagePath, NSString* indexNam
 
 	}  /* end subArchive processing */
 	[archive release];
+}  /* end method */
+
+-(void) loadWebArchive:(NSString*) pathToWebArchive
+{
+	[self loadWebArchiveAtURL:[NSURL fileURLWithPath:pathToWebArchive]];
 }  /* end method */
 
 
