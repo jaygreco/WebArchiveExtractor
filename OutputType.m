@@ -17,7 +17,6 @@
 	[displayText release];
 	displayText = text; */
 	text = [text copy];
-	[displayText release];
 	displayText = text;
 }
 

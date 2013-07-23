@@ -38,8 +38,8 @@ static NSString* composeEntryPointPath(NSString* packagePath, NSString* indexNam
 	}
 	else
 	{
-		m_resources = [[NSMutableSet set] retain];
-		m_resourceLookupTable = [[NSMutableDictionary dictionary] retain];
+		m_resources = [NSMutableSet set];
+		m_resourceLookupTable = [NSMutableDictionary dictionary];
 	}
 
 	NSData * webArchiveContent = [NSData dataWithContentsOfURL:webArchiveURL];
@@ -66,7 +66,7 @@ static NSString* composeEntryPointPath(NSString* packagePath, NSString* indexNam
 		int i;
 		for (i=0; i<[subArchives count]; i++)
 		{
-			WebArchive *nuArchive = [subArchives objectAtIndex:i];
+			WebArchive *nuArchive = subArchives[i];
 			if (nuArchive)
 			{
 				[self parseWebArchive:nuArchive];
@@ -74,7 +74,6 @@ static NSString* composeEntryPointPath(NSString* packagePath, NSString* indexNam
 		}
 
 	}  /* end subArchive processing */
-	[archive release];
 }  /* end method */
 
 -(void) loadWebArchive:(NSString*) pathToWebArchive
@@ -89,7 +88,7 @@ static NSString* composeEntryPointPath(NSString* packagePath, NSString* indexNam
 	 - Robert Covington artlythere@kagi.com
 	 12/12/11
 	 */
-	m_mainResource = [[archiveToParse mainResource] retain];
+	m_mainResource = [archiveToParse mainResource];
 	[self addResource:m_mainResource];
 
 	NSArray * subresources = [archiveToParse subresources];
@@ -99,7 +98,7 @@ static NSString* composeEntryPointPath(NSString* packagePath, NSString* indexNam
 		int i;
 		for (i=0; i<[subresources count]; i++)
 		{
-			resource = (WebResource*) [subresources objectAtIndex:i];
+			resource = (WebResource*) subresources[i];
 			[self addResource:resource];
 		}
 	}
@@ -117,10 +116,10 @@ static NSString* composeEntryPointPath(NSString* packagePath, NSString* indexNam
 
 	if(path != nil) {
 		//NSLog(@"resource url absoluteString = %s\n", [absoluteString cString] );
-		[m_resourceLookupTable setObject:resource forKey:absoluteString];
+		m_resourceLookupTable[absoluteString] = resource;
 
 		//NSLog(@"resource url path = %s\n", [path cString] );
-		[m_resourceLookupTable setObject:resource forKey:path];
+		m_resourceLookupTable[path] = resource;
 
 		//BOOL isFile = [url isFileURL];
 		//if (isFile)
@@ -195,8 +194,8 @@ static NSString* composeEntryPointPath(NSString* packagePath, NSString* indexNam
 	if (resource == m_mainResource) {
 		NSStringEncoding encoding = CFStringConvertEncodingToNSStringEncoding(CFStringConvertIANACharSetNameToEncoding((CFStringRef)[m_mainResource textEncodingName]));
 		
-		NSString * source = [[[NSString alloc] initWithData:[resource data]
-												   encoding:encoding] autorelease];
+		NSString * source = [[NSString alloc] initWithData:[resource data]
+												   encoding:encoding];
 
 		NSLog(
 			  NSLocalizedStringFromTable(@"resource encoding is", @"InfoPlist", @"Resource encoding"),
@@ -220,7 +219,6 @@ static NSString* composeEntryPointPath(NSString* packagePath, NSString* indexNam
 		[doc setDocumentContentKind:[self contentKind]];
 
 		if (doc)	{
-			[doc autorelease];
 			//process images
 			err = nil;
 
@@ -245,7 +243,7 @@ static NSString* composeEntryPointPath(NSString* packagePath, NSString* indexNam
 
 					if (href) {
 						NSString * hrefValue = [href objectValue];
-						WebResource * res = [m_resourceLookupTable objectForKey: hrefValue];
+						WebResource * res = m_resourceLookupTable[hrefValue];
 						
 						if (res) {
 							//NSLog(@"%@", [[[res URL] path] substringFromIndex:1]);
@@ -299,11 +297,5 @@ static NSString* composeEntryPointPath(NSString* packagePath, NSString* indexNam
 	}
 }
 
-- (void) dealloc {
-	[m_mainResource release];
-	[m_resources release];
-	[m_resourceLookupTable release];
-	[super dealloc];
-}
 
 @end

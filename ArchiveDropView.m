@@ -30,12 +30,11 @@ static void logMessage(NSTextView* log, NSColor* color, NSString* message)
 {
 	if ((self = [super initWithFrame:frameRect]) != nil) {
 		// Add initialization code here
-		[self registerForDraggedTypes:[NSArray arrayWithObjects: NSFilenamesPboardType, nil]];
+		[self registerForDraggedTypes:@[NSFilenamesPboardType]];
 		
 		//set the drop target image
 		NSImage *newImage = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForImageResource: @"extract_archive.png"]];
 		[self setImage:newImage];
-		[newImage release];
 	}
 	return self;
 }
@@ -50,8 +49,7 @@ static void logMessage(NSTextView* log, NSColor* color, NSString* message)
 
 - (void)setImage:(NSImage *)newImage
 {
-    NSImage *temp = [newImage retain];
-    [_dropImage release];
+    NSImage *temp = newImage;
     _dropImage = temp;
 }
 
@@ -125,7 +123,7 @@ static void logMessage(NSTextView* log, NSColor* color, NSString* message)
 		int i;
 		for (i=0; i<numberOfFiles; i++)
 		{
-			NSString* fileName = [files objectAtIndex:i];
+			NSString* fileName = files[i];
 			
 			[self logInfo:[NSString stringWithFormat: NSLocalizedStringFromTable(@"processing", @"InfoPlist", @"processing file: 1 name"), fileName] ];
 			
@@ -147,7 +145,7 @@ static void logMessage(NSTextView* log, NSColor* color, NSString* message)
 						outputPath  = [dirPath stringByAppendingPathComponent: [NSString stringWithFormat: dirName, i++]];
 					}
 					
-					Extractor * extr = [[[Extractor alloc] init] autorelease];
+					Extractor * extr = [[Extractor alloc] init];
 					[extr loadWebArchive: fileName];
 					[extr setEntryFileName: indexFileName];
 					[extr setContentKind: type];
