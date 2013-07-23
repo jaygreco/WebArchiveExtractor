@@ -11,7 +11,6 @@
 @implementation WebArchiveController
 
 - (void)awakeFromNib {
-	NSLog(@"%@", NSLocalizedStringFromTable(@"NSHumanReadableCopyright", @"InfoPlist", @"Copyright"));
 	[mainWindow setDelegate:self];
 }
 
