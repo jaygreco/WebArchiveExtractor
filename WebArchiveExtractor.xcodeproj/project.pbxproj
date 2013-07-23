@@ -11,6 +11,7 @@
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		B29563BD179F0915001D64F1 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = B29563BB179F0915001D64F1 /* MainMenu.xib */; };
+		B29563C0179F1830001D64F1 /* WAEAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B29563BF179F1830001D64F1 /* WAEAppDelegate.m */; };
 		DA16F9170CB8965500B792B3 /* extract_archive.png in Resources */ = {isa = PBXBuildFile; fileRef = DA16F9150CB8965500B792B3 /* extract_archive.png */; };
 		DA16F9420CB89B5200B792B3 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA16F92E0CB89B5200B792B3 /* Sparkle.framework */; };
 		DA16F9470CB89BAC00B792B3 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = DA16F92E0CB89B5200B792B3 /* Sparkle.framework */; };
@@ -64,6 +65,8 @@
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* WebArchive Extractor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "WebArchive Extractor.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B29563BC179F0915001D64F1 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		B29563BE179F1830001D64F1 /* WAEAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WAEAppDelegate.h; sourceTree = "<group>"; };
+		B29563BF179F1830001D64F1 /* WAEAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WAEAppDelegate.m; sourceTree = "<group>"; };
 		DA16F9150CB8965500B792B3 /* extract_archive.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = extract_archive.png; sourceTree = "<group>"; };
 		DA16F9160CB8965500B792B3 /* DropTargetGraphic.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = DropTargetGraphic.psd; sourceTree = "<group>"; };
 		DA16F92E0CB89B5200B792B3 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
@@ -211,6 +214,8 @@
 				DAACE8020CBABE2100079E23 /* OutputType */,
 				DA60BC460CA0B2AC000393B9 /* Extractor.h */,
 				DA60BC470CA0B2AC000393B9 /* Extractor.m */,
+				B29563BE179F1830001D64F1 /* WAEAppDelegate.h */,
+				B29563BF179F1830001D64F1 /* WAEAppDelegate.m */,
 			);
 			name = Core;
 			sourceTree = "<group>";
@@ -372,6 +377,7 @@
 				DA6A0B960CB87A7D00FDC439 /* MenuDelegate.m in Sources */,
 				DAACE7FF0CBABE1900079E23 /* OutputType.m in Sources */,
 				DAACE8080CBABE5700079E23 /* OutputTypeController.m in Sources */,
+				B29563C0179F1830001D64F1 /* WAEAppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
