@@ -8,15 +8,9 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface OutputType : NSObject {
-	NSString * displayText;
-	int documentContentKind;
-}
+@interface OutputType : NSObject
 
-- (void) setDisplayText: (NSString *) displayText;
-- (NSString *) displayText;
-
-- (void) setDocumentContentKind: (int) kind;
-- (int) documentContentKind;
+@property (copy)	NSString	*displayText;
+@property (assign)	int			documentContentKind;
 
 @end

@@ -11,29 +11,4 @@
 
 @implementation OutputType
 
-- (void) setDisplayText: (NSString *) text
-{
-	/* [text retain];
-	[displayText release];
-	displayText = text; */
-	text = [text copy];
-	displayText = text;
-}
-
-- (NSString *) displayText
-{
-	return displayText;
-}
-
-- (void) setDocumentContentKind: (int) kind
-{
-	documentContentKind = kind;
-}
-
-- (int) documentContentKind 
-{
-	return documentContentKind;
-}
-
-
 @end

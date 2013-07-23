@@ -47,17 +47,6 @@ static void logMessage(NSTextView* log, NSColor* color, NSString* message)
 	[image drawAtPoint:ourBounds.origin fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0];
 }
 
-- (void)setImage:(NSImage *)newImage
-{
-    NSImage *temp = newImage;
-    _dropImage = temp;
-}
-
-- (NSImage *)image
-{
-    return _dropImage;
-}
-
 ////////////////////////////////////////////////////////////////
 
 - (void)logError:(NSString*) message
