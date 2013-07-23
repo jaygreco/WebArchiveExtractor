@@ -14,33 +14,34 @@
 
 - (id) init
 {
-	[super init];
-	outputTypeList = [[NSMutableArray alloc] init];
-	
-	//setup all the basic types
-	OutputType * tmp = [[OutputType alloc] init];
-	[tmp setDisplayText: @"XML"];
-	[tmp setDocumentContentKind: NSXMLDocumentXMLKind];
-	[outputTypeList addObject: tmp];
-	[tmp release];
-	
-	tmp = [[OutputType alloc] init];
-	[tmp setDisplayText: @"HTML"];
-	[tmp setDocumentContentKind: NSXMLDocumentHTMLKind];
-	[outputTypeList addObject: tmp];
-	[tmp release];
-	
-	tmp = [[OutputType alloc] init];
-	[tmp setDisplayText: @"XHTML"];
-	[tmp setDocumentContentKind: NSXMLDocumentXHTMLKind];
-	[outputTypeList addObject: tmp];
-	[tmp release];
+	if (self = [super init]) {
+		outputTypeList = [[NSMutableArray alloc] init];
 
-	/* tmp = [[OutputType alloc] init];
-	[tmp setDisplayText: @"Text"];
-	[tmp setDocumentContentKind: NSXMLDocumentTextKind];
-	[outputTypeList addObject: tmp];
-	[tmp release]; */
+		//setup all the basic types
+		OutputType * tmp = [[OutputType alloc] init];
+		[tmp setDisplayText: @"XML"];
+		[tmp setDocumentContentKind: NSXMLDocumentXMLKind];
+		[outputTypeList addObject: tmp];
+		[tmp release];
+
+		tmp = [[OutputType alloc] init];
+		[tmp setDisplayText: @"HTML"];
+		[tmp setDocumentContentKind: NSXMLDocumentHTMLKind];
+		[outputTypeList addObject: tmp];
+		[tmp release];
+
+		tmp = [[OutputType alloc] init];
+		[tmp setDisplayText: @"XHTML"];
+		[tmp setDocumentContentKind: NSXMLDocumentXHTMLKind];
+		[outputTypeList addObject: tmp];
+		[tmp release];
+
+		/* tmp = [[OutputType alloc] init];
+		 [tmp setDisplayText: @"Text"];
+		 [tmp setDocumentContentKind: NSXMLDocumentTextKind];
+		 [outputTypeList addObject: tmp];
+		 [tmp release]; */
+	}
 	
 	return self;
 }

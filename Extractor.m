@@ -21,10 +21,11 @@ static NSString* composeEntryPointPath(NSString* packagePath, NSString* indexNam
 
 - (id) init
 {
-	[super init];
+	if (self = [super init]) {
 	
 	//default to XHTML if there is nothing else
-	contentKind = NSXMLDocumentXHTMLKind;
+		contentKind = NSXMLDocumentXHTMLKind;
+	}
 		
 	return self;
 }
@@ -66,16 +67,15 @@ static NSString* composeEntryPointPath(NSString* packagePath, NSString* indexNam
 		int i;
 		for (i=0; i<[subArchives count]; i++)
 		{
-			WebArchive * nuArchive = [WebArchive alloc];
-			nuArchive = [subArchives objectAtIndex:i];
+			WebArchive *nuArchive = [subArchives objectAtIndex:i];
 			if (nuArchive)
 			{
 				[self parseWebArchive:nuArchive];
-				[nuArchive release]; // release subArchive
 			}
 		}
 		
 	}  /* end subArchive processing */
+	[archive release];
 }  /* end method */
 
 
@@ -98,9 +98,7 @@ static NSString* composeEntryPointPath(NSString* packagePath, NSString* indexNam
 			resource = (WebResource*) [subresources objectAtIndex:i];
 			[self addResource:resource];
 		}	
-	}
-	
-	[archiveToParse release];
+	}	
 }
 
 
@@ -234,8 +232,8 @@ static NSString* composeEntryPointPath(NSString* packagePath, NSString* indexNam
 			encoding = NSISOLatin1StringEncoding;
 		}
 
-		NSString * source = [[[NSString alloc] autorelease] initWithData:[resource data] 
-																encoding: encoding];
+		NSString * source = [[[NSString alloc] initWithData:[resource data]
+																encoding:encoding] autorelease];
 		
 		NSLog(
 			  NSLocalizedStringFromTable(@"resource encoding is", @"InfoPlist", @"Resource encoding"), 

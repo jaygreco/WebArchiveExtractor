@@ -147,7 +147,7 @@ static void logMessage(NSTextView* log, NSColor* color, NSString* message)
 						outputPath  = [dirPath stringByAppendingPathComponent: [NSString stringWithFormat: dirName, i++]];
 					}
 					
-					Extractor * extr = [[[Extractor alloc] autorelease ] init];
+					Extractor * extr = [[[Extractor alloc] init] autorelease];
 					[extr loadWebArchive: fileName];
 					[extr setEntryFileName: indexFileName];
 					[extr setContentKind: type];
@@ -170,9 +170,9 @@ static void logMessage(NSTextView* log, NSColor* color, NSString* message)
 - (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender 
 {
     NSPasteboard *pboard;
-    NSDragOperation sourceDragMask;
+    //NSDragOperation sourceDragMask;
 	
-    sourceDragMask = [sender draggingSourceOperationMask];
+    //sourceDragMask = [sender draggingSourceOperationMask];
     pboard = [sender draggingPasteboard];
 	
     if ( [[pboard types] containsObject:NSFilenamesPboardType] ) {
