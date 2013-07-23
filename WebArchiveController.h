@@ -10,7 +10,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface WebArchiveController : NSObject
+@interface WebArchiveController : NSObject <NSWindowDelegate>
 {
     IBOutlet NSWindow *mainWindow;
 }
