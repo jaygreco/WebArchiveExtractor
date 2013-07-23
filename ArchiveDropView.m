@@ -45,7 +45,7 @@ static void logMessage(NSTextView* log, NSColor* color, NSString* message)
 	NSRect ourBounds = [self bounds];
     NSImage *image = [self image];
     [super drawRect:rect];
-    [image compositeToPoint:(ourBounds.origin) operation:NSCompositeSourceOver];
+	[image drawAtPoint:ourBounds.origin fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0];
 }
 
 - (void)setImage:(NSImage *)newImage
