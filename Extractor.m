@@ -61,18 +61,9 @@ static NSString* composeEntryPointPath(NSString* packagePath, NSString* indexNam
 
 	NSArray * subArchives = [archive subframeArchives];
 
-	if (subArchives)
-	{
-		int i;
-		for (i=0; i<[subArchives count]; i++)
-		{
-			WebArchive *nuArchive = subArchives[i];
-			if (nuArchive)
-			{
-				[self parseWebArchive:nuArchive];
-			}
-		}
-
+	if (subArchives) {
+		for (WebArchive *nuArchive in [archive subframeArchives])
+			[self parseWebArchive:nuArchive];
 	}  /* end subArchive processing */
 }  /* end method */
 
