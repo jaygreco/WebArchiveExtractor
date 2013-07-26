@@ -13,8 +13,6 @@
 		B29563BD179F0915001D64F1 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = B29563BB179F0915001D64F1 /* MainMenu.xib */; };
 		B29563C0179F1830001D64F1 /* WAEAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B29563BF179F1830001D64F1 /* WAEAppDelegate.m */; };
 		DA16F9170CB8965500B792B3 /* extract_archive.png in Resources */ = {isa = PBXBuildFile; fileRef = DA16F9150CB8965500B792B3 /* extract_archive.png */; };
-		DA16F9420CB89B5200B792B3 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA16F92E0CB89B5200B792B3 /* Sparkle.framework */; };
-		DA16F9470CB89BAC00B792B3 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = DA16F92E0CB89B5200B792B3 /* Sparkle.framework */; };
 		DA1A776C0F5EA4B400045781 /* WebArchiveExtractor.sdef in Resources */ = {isa = PBXBuildFile; fileRef = DA1A776B0F5EA4B400045781 /* WebArchiveExtractor.sdef */; };
 		DA3907CA0CB8AC2900B9FAB0 /* LICENSE.rtfd in Resources */ = {isa = PBXBuildFile; fileRef = DA3907C60CB8AC2900B9FAB0 /* LICENSE.rtfd */; };
 		DA60BC480CA0B2AC000393B9 /* Extractor.m in Sources */ = {isa = PBXBuildFile; fileRef = DA60BC470CA0B2AC000393B9 /* Extractor.m */; };
@@ -46,7 +44,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				DA16F9470CB89BAC00B792B3 /* Sparkle.framework in CopyFiles */,
 				DAACE7FE0CBABE1900079E23 /* OutputType.h in CopyFiles */,
 				DAACE8070CBABE5700079E23 /* OutputTypeController.h in CopyFiles */,
 			);
@@ -69,7 +66,6 @@
 		B29563BF179F1830001D64F1 /* WAEAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WAEAppDelegate.m; sourceTree = "<group>"; };
 		DA16F9150CB8965500B792B3 /* extract_archive.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = extract_archive.png; sourceTree = "<group>"; };
 		DA16F9160CB8965500B792B3 /* DropTargetGraphic.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = DropTargetGraphic.psd; sourceTree = "<group>"; };
-		DA16F92E0CB89B5200B792B3 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
 		DA1A776B0F5EA4B400045781 /* WebArchiveExtractor.sdef */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.sdef; path = WebArchiveExtractor.sdef; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.xml; };
 		DA3907C60CB8AC2900B9FAB0 /* LICENSE.rtfd */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; path = LICENSE.rtfd; sourceTree = "<group>"; };
 		DA60BC460CA0B2AC000393B9 /* Extractor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Extractor.h; sourceTree = "<group>"; };
@@ -113,7 +109,6 @@
 			files = (
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				DA60BD070CA0BFD4000393B9 /* WebKit.framework in Frameworks */,
-				DA16F9420CB89B5200B792B3 /* Sparkle.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -132,7 +127,6 @@
 		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				DA16F92E0CB89B5200B792B3 /* Sparkle.framework */,
 				DA60BD060CA0BFD4000393B9 /* WebKit.framework */,
 				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
 			);
