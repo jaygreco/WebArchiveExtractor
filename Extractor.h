@@ -20,6 +20,11 @@
  */
 - (void)loadWebArchiveAtURL:(NSURL *)webArchiveURL;
 
+/**
+ * extract to directory
+ */
+- (NSURL *)extractResourcesToURL:(NSURL *)url;
+
 @property (copy)	NSString *entryFileName;
 @property (assign)	int	contentKind;
 @property (copy)	NSString *URLPrepend;

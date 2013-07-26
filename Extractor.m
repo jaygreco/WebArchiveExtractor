@@ -30,12 +30,6 @@ static NSString* composeEntryPointPath(NSString* packagePath, NSString* indexNam
  */
 - (void)addResource:(WebResource *) resource;
 
-
-/**
- * extract to directory
- */
-- (NSURL *)extractResourcesToURL:(NSURL *)url;
-
 /**
  * private method
  * extract resource to existing packagePath (using outputResource)
