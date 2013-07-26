@@ -20,37 +20,6 @@
  */
 - (void)loadWebArchiveAtURL:(NSURL *)webArchiveURL;
 
-/**
-parse WebArchive (can be main archive, or subframeArchives)
-added by Robert Covington to handle archives with subframeArchives
-*/
--(void) parseWebArchive:(WebArchive *) archiveToParse; 
-
-/**
- * add resource to resource table
- */
-- (void) addResource:(WebResource *) resource;
-
-
-/**
- * extract to directory
- */
-- (NSURL *)extractResourcesToURL:(NSURL *)url;
-
-/**
- * private method
- * extract resource to existing packagePath (using outputResource)
- * (packagePath the same as path of extractResources message)
- */
-- (void) extractResource:(WebResource *)resource packageURL:(NSURL *)url;
-
-/**
- * protected method
- * write resource data to filePath
- * Parent directory of filePath should exists
- */
--(void) outputResource:(WebResource *)resource fileURL:(NSURL *)filePath packageURL:(NSURL *)packageURL;
-
 @property (copy)	NSString *entryFileName;
 @property (assign)	int	contentKind;
 @property (copy)	NSString *URLPrepend;
