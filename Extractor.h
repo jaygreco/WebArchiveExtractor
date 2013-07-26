@@ -27,6 +27,7 @@
 /**
  * load web archive file
  */
+- (void)loadWebArchiveAtURL:(NSURL *)webArchiveURL;
 - (void) loadWebArchive:(NSString*) pathToWebArchive;
 
 /**

@@ -28,13 +28,12 @@ static void logMessage(NSTextView* log, NSColor* color, NSString* message)
 
 - (id)initWithFrame:(NSRect)frameRect
 {
-	if ((self = [super initWithFrame:frameRect]) != nil) {
+	if ((self = [super initWithFrame:frameRect])) {
 		// Add initialization code here
 		[self registerForDraggedTypes:@[NSFilenamesPboardType]];
 		
 		//set the drop target image
-		NSImage *newImage = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForImageResource: @"extract_archive.png"]];
-		[self setImage:newImage];
+		[self setImage:[NSImage imageNamed:@"extract_archive"]];
 	}
 	return self;
 }
@@ -80,24 +79,22 @@ static void logMessage(NSTextView* log, NSColor* color, NSString* message)
 	
 	//get the user defined index name
 	NSString * indexFileName = [[userDefaults values] valueForKey:@"WAEIndexName"];
-	if (indexFileName == nil || [indexFileName length] == 0) {
+	if (indexFileName == nil || [indexFileName length] == 0)
 		indexFileName = @"index.html";
-	}
 	
 	//get the user selected output type
 	//HACK alert. I need to figure out a better way to do this. I thought the User
 	//types from the select box would get an object, but it only returns a string :-/
 	NSString * outputType = [[userDefaults values] valueForKey:@"WAEOutputType"];
 	int type = NSXMLDocumentXHTMLKind;
-	if ( [outputType isEqualToString:@"HTML"] ) {
+	if ( [outputType isEqualToString:@"HTML"] )
 		type = NSXMLDocumentHTMLKind;
-	} else if ( [outputType isEqualToString:@"XML"] ) {
+	else if ( [outputType isEqualToString:@"XML"] )
 		type = NSXMLDocumentXMLKind;
-	} else if ( [outputType isEqualToString:@"XHTML"] ) {
+	else if ( [outputType isEqualToString:@"XHTML"] )
 		type = NSXMLDocumentXHTMLKind;
-	} else if ( [outputType isEqualToString:@"Text"] ) {
+	else if ( [outputType isEqualToString:@"Text"] )
 		type = NSXMLDocumentTextKind;
-	}
 	
 	NSString * URLPrepend = [[userDefaults values] valueForKey:@"WAEURLOffset"];
 	if (URLPrepend == nil || [URLPrepend length] == 0) {
@@ -105,73 +102,56 @@ static void logMessage(NSTextView* log, NSColor* color, NSString* message)
 	}
 	///////////////////////////////////
 	
-    if ( [[pboard types] containsObject:NSFilenamesPboardType] ) {
-        NSArray *files = [pboard propertyListForType:NSFilenamesPboardType];
-        int numberOfFiles = [files count];
-		//NSLog(@"%i\n", numberOfFiles);
-		int i;
-		for (i=0; i<numberOfFiles; i++)
+	NSDictionary *options = @{ NSPasteboardURLReadingFileURLsOnlyKey: @YES, NSPasteboardURLReadingContentsConformToTypesKey: @[@"com.apple.webarchive"] };
+	NSArray *fileURLs = [pboard readObjectsForClasses:@[[NSURL class]] options:options];
+
+	for (NSURL *fileURL in fileURLs) {
+		[self logInfo:[NSString stringWithFormat: NSLocalizedStringFromTable(@"processing", @"InfoPlist", @"processing file: 1 name"), [fileURL path]] ];
+		
+		NSURL *dirURL = [fileURL URLByDeletingLastPathComponent];
+		NSNumber *isWritable;
+		[dirURL getResourceValue:&isWritable forKey:NSURLIsWritableKey error:nil];
+
+		if ([isWritable boolValue])
 		{
-			NSString* fileName = files[i];
+			NSString *archiveName = [[fileURL lastPathComponent] stringByDeletingPathExtension];
+			NSURL *outputURL = [dirURL URLByAppendingPathComponent:archiveName];
 			
-			[self logInfo:[NSString stringWithFormat: NSLocalizedStringFromTable(@"processing", @"InfoPlist", @"processing file: 1 name"), fileName] ];
+			NSUInteger i = 0;
+			NSString *dirNameFormat = [archiveName stringByAppendingString:@"-%i"];
 			
-			if ([fileName hasSuffix:@"webarchive"])
+			while([outputURL checkResourceIsReachableAndReturnError:nil])
 			{
-				NSFileManager * fm = [NSFileManager defaultManager];
-				NSString * dirPath = [fileName stringByDeletingLastPathComponent];
-				
-				if ([fm isWritableFileAtPath:dirPath])
-				{
-					NSString * archiveName = [[fileName lastPathComponent] stringByDeletingPathExtension];
-					NSString * outputPath  =  [dirPath stringByAppendingPathComponent: archiveName];
-					
-					int i = 0;
-					while([fm fileExistsAtPath:outputPath])
-					{
-						[self logWarning:[NSString stringWithFormat: NSLocalizedStringFromTable(@"folder exists", @"InfoPlist", @"folder already exists: 1 name"), outputPath] ];
-						NSString * dirName = [archiveName stringByAppendingString:@"-%i"]; 
-						outputPath  = [dirPath stringByAppendingPathComponent: [NSString stringWithFormat: dirName, i++]];
-					}
-					
-					Extractor * extr = [[Extractor alloc] init];
-					[extr loadWebArchive: fileName];
-					[extr setEntryFileName: indexFileName];
-					[extr setContentKind: type];
-					[extr setURLPrepend: URLPrepend];
-					NSURL * mainResourceURL = [extr extractResourcesToURL:[NSURL fileURLWithPath:outputPath]];
-					
-					[self logResult:[NSString stringWithFormat: NSLocalizedStringFromTable(@"extract success", @"InfoPlist", @"extract success 1=folder name 2=main file"), outputPath, [mainResourceURL path]]];
-					
-				}
+				[self logWarning:[NSString stringWithFormat: NSLocalizedStringFromTable(@"folder exists", @"InfoPlist", @"folder already exists: 1 name"), outputURL] ];
+				outputURL  = [dirURL URLByAppendingPathComponent:[NSString stringWithFormat: dirNameFormat, i++]];
 			}
-			else
-			{
-				[self logError: NSLocalizedStringFromTable(@"not archive", @"InfoPlist", @"")];
-			}
+
+			Extractor * extr = [[Extractor alloc] init];
+			[extr loadWebArchiveAtURL:fileURL];
+			[extr setEntryFileName:indexFileName];
+			[extr setContentKind: type];
+			[extr setURLPrepend: URLPrepend];
+			NSURL *mainResourceURL = [extr extractResourcesToURL:outputURL];
+
+			[self logResult:[NSString stringWithFormat: NSLocalizedStringFromTable(@"extract success", @"InfoPlist", @"extract success 1=folder name 2=main file"), outputURL, [mainResourceURL path]]];
 		}
-    }
+	}
+	
     return YES;
 }
 
 - (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender 
 {
-    NSPasteboard *pboard;
     //NSDragOperation sourceDragMask;
 	
     //sourceDragMask = [sender draggingSourceOperationMask];
-    pboard = [sender draggingPasteboard];
+    NSPasteboard *pboard = [sender draggingPasteboard];
+
+	NSDictionary *options = @{ NSPasteboardURLReadingFileURLsOnlyKey: @YES, NSPasteboardURLReadingContentsConformToTypesKey: @[@"com.apple.webarchive"] };
 	
-    if ( [[pboard types] containsObject:NSFilenamesPboardType] ) {
-		/*
-		 if (sourceDragMask & NSDragOperationLink) {
-			 return NSDragOperationLink;
-		 } else if (sourceDragMask & NSDragOperationCopy) {
-			 return NSDragOperationCopy;
-		 }
-		 */
+    if ( [pboard canReadObjectForClasses:@[[NSURL class]] options:options] )
 		return NSDragOperationCopy;
-    }
+
     return NSDragOperationNone;
 }
 
