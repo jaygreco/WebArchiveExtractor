@@ -27,6 +27,7 @@ static void logMessage(NSTextView* log, NSColor* color, NSString* message)
 @interface ArchiveDropView ()
 
 @property (assign,getter=isHighlighted)	BOOL	highlighted;
+@property (assign)						BOOL	drawsDottedBorder;
 
 @end
 
@@ -40,15 +41,27 @@ static void logMessage(NSTextView* log, NSColor* color, NSString* message)
 		
 		//set the drop target image
 		[self setImage:[NSImage imageNamed:@"extract_archive"]];
+		_drawsDottedBorder = YES;
 	}
 	return self;
 }
 
 - (void)drawRect:(NSRect)rect
 {
-	NSRect ourBounds = [self bounds];
+	NSRect bounds = [self bounds];
+	
+	if (self.drawsDottedBorder) {
+		NSRect borderRect = NSInsetRect(bounds, 2.0, 2.0);
+		NSBezierPath *border = [NSBezierPath bezierPathWithRoundedRect:borderRect xRadius:16.0 yRadius:16.0];
+		CGFloat dash[] = { 16.0, 8.0 };
+		[border setLineDash:dash count:sizeof(dash) / sizeof(dash[0]) phase:8.0];
+		[border setLineWidth:4.0];
+		[[NSColor colorWithCalibratedWhite:1.0 alpha:0.3] set];
+		[border stroke];
+	}
+
     NSImage *image = [self image];
-	NSPoint p = { .x = round((ourBounds.size.width - [image size].width) / 2.0), .y = round((ourBounds.size.height - [image size].height) / 2.0) };
+	NSPoint p = { .x = round((bounds.size.width - [image size].width) / 2.0), .y = round((bounds.size.height - [image size].height) / 2.0) };
     [super drawRect:rect];
 
 	NSImage *finalImage = image;
@@ -57,7 +70,7 @@ static void logMessage(NSTextView* log, NSColor* color, NSString* message)
 		finalImage = [image copy];
 		[finalImage lockFocus];
 		[[NSColor colorWithCalibratedWhite:0.0 alpha:0.5] set];
-		NSRectFillUsingOperation(ourBounds, NSCompositeSourceAtop);
+		NSRectFillUsingOperation(bounds, NSCompositeSourceAtop);
 		[finalImage unlockFocus];
 	}
 
