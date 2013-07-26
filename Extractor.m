@@ -76,11 +76,6 @@ static NSString* composeEntryPointPath(NSString* packagePath, NSString* indexNam
 	}  /* end subArchive processing */
 }  /* end method */
 
--(void) loadWebArchive:(NSString*) pathToWebArchive
-{
-	[self loadWebArchiveAtURL:[NSURL fileURLWithPath:pathToWebArchive]];
-}  /* end method */
-
 
 -(void) parseWebArchive:(WebArchive *) archiveToParse
 {
