@@ -15,18 +15,17 @@
 
 @interface Extractor : NSObject 
 
-/**
- * load web archive file
- */
++ (void)extractWebArchiveAtURL:(NSURL *)webArchiveURL toURL:(NSURL *)url;
+
+
+// load web archive file
 - (void)loadWebArchiveAtURL:(NSURL *)webArchiveURL;
 
-/**
- * extract to directory
- */
+// extract to directory
 - (NSURL *)extractResourcesToURL:(NSURL *)url;
 
-@property (copy)	NSString *entryFileName;
-@property (assign)	int	contentKind;
-@property (copy)	NSString *URLPrepend;
+@property (copy)	NSString	*entryFileName;
+@property (assign)	int			contentKind;
+@property (copy)	NSString	*URLPrepend;
 
 @end

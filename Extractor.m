@@ -47,13 +47,13 @@ static NSString* composeEntryPointPath(NSString* packagePath, NSString* indexNam
 @end
 
 @implementation Extractor {
-	WebResource *  m_mainResource;
-	NSMutableSet * m_resources;
+	WebResource		*m_mainResource;
+	NSMutableSet	*m_resources;
 
 	//in m_resourceLookupTable HTML resource can be stored with relative or
 	//absolute path m_resourceLookupTable contains several keys for each resource
 	// (as least 2: absolute and relative paths)
-	NSMutableDictionary * m_resourceLookupTable;
+	NSMutableDictionary		*m_resourceLookupTable;
 }
 
 
@@ -63,46 +63,40 @@ static NSString* composeEntryPointPath(NSString* packagePath, NSString* indexNam
 
 		//default to XHTML if there is nothing else
 		_contentKind = NSXMLDocumentXHTMLKind;
+		
+		m_resources = [NSMutableSet set];
+		m_resourceLookupTable = [NSMutableDictionary dictionary];
 	}
 
 	return self;
 }
 
 - (void)loadWebArchiveAtURL:(NSURL *)webArchiveURL {
-	if (m_resources)
-	{
-		[m_resources removeAllObjects];
-		[m_resourceLookupTable removeAllObjects];
-	}
-	else
-	{
-		m_resources = [NSMutableSet set];
-		m_resourceLookupTable = [NSMutableDictionary dictionary];
-	}
-
-	NSData * webArchiveContent = [NSData dataWithContentsOfURL:webArchiveURL];
-	WebArchive * archive = [[WebArchive alloc] initWithData:webArchiveContent];
-
+	[m_resources removeAllObjects];
+	[m_resourceLookupTable removeAllObjects];
+	
+	NSData *webArchiveContent = [NSData dataWithContentsOfURL:webArchiveURL];
+	WebArchive *archive = [[WebArchive alloc] initWithData:webArchiveContent];
 
 	/* Added method parseWebArchive to more easily deal with subframeArchives in a looping fashion
 	 Deal with main resource first...may or may not cover it all - Robert Covington artlythere@kagi.com
 	 12/12/11
 	 */
-
+	
 	[self parseWebArchive:archive];
-
+	
 	/*
 	 Check for SubFrameArchives - catches anything left over...some sites using frames will
 	 invoke this and otherwise would generate only a single HTML index file
 	 - Robert Covington artlythere@kagi.com 12/12/11
 	 */
-
+	
 	NSArray * subArchives = [archive subframeArchives];
 
 	if (subArchives) {
 		for (WebArchive *nuArchive in [archive subframeArchives])
 			[self parseWebArchive:nuArchive];
-	}  /* end subArchive processing */
+	}
 }  /* end method */
 
 
@@ -146,8 +140,8 @@ static NSString* composeEntryPointPath(NSString* packagePath, NSString* indexNam
 
 - (NSURL *)extractResourcesToURL:(NSURL *)url {
 	NSFileManager * fm = [NSFileManager defaultManager];
-	NSNumber *isDirectory = nil;
-
+	NSNumber *isDirectory;
+	
 	if ([url checkResourceIsReachableAndReturnError:nil] && [url getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:nil] && [isDirectory boolValue])
 	{
 		if (![fm removeItemAtURL:url error:nil])
@@ -278,7 +272,7 @@ static NSString* composeEntryPointPath(NSString* packagePath, NSString* indexNam
 			NSURL *fileURLXHtml = [packageURL URLByAppendingPathComponent:[self entryFileName]];
 			[doc setCharacterEncoding: @"UTF-8"];
 
-			if (![[doc XMLDataWithOptions: NSXMLDocumentXHTMLKind] writeToURL:fileURLXHtml atomically:NO]) {
+			if (![[doc XMLDataWithOptions:NSXMLDocumentXHTMLKind] writeToURL:fileURLXHtml atomically:NO]) {
 				NSLog(
 					  NSLocalizedStringFromTable(
 												 @"cannot write xhtml",
