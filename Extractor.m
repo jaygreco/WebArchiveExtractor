@@ -51,7 +51,7 @@ static NSString* composeEntryPointPath(NSString* packagePath, NSString* indexNam
 	 12/12/11
 	 */
 
-	[self parseWebArchive:archive ];
+	[self parseWebArchive:archive];
 
 	/*
 	 Check for SubFrameArchives - catches anything left over...some sites using frames will
