@@ -149,7 +149,7 @@ static void logMessage(NSTextView* log, NSColor* color, NSString* message)
 			NSURL *outputURL = [dirURL URLByAppendingPathComponent:archiveName];
 			
 			NSUInteger i = 0;
-			NSString *dirNameFormat = [archiveName stringByAppendingString:@"-%i"];
+			NSString *dirNameFormat = [archiveName stringByAppendingString:@"-%ld"];
 			
 			while([outputURL checkResourceIsReachableAndReturnError:nil])
 			{
