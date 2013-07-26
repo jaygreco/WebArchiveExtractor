@@ -15,7 +15,7 @@
 
 @interface Extractor : NSObject 
 
-+ (void)extractWebArchiveAtURL:(NSURL *)webArchiveURL toURL:(NSURL *)url;
+//+ (void)extractWebArchiveAtURL:(NSURL *)webArchiveURL toURL:(NSURL *)url;
 
 
 // load web archive file
