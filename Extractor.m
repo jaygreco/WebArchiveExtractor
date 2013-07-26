@@ -17,7 +17,16 @@ static NSString* composeEntryPointPath(NSString* packagePath, NSString* indexNam
 	return [packagePath stringByAppendingPathComponent:indexName];
 }
 
-@implementation Extractor
+@implementation Extractor {
+	WebResource *  m_mainResource;
+	NSMutableSet * m_resources;
+
+	//in m_resourceLookupTable HTML resource can be stored with relative or
+	//absolute path m_resourceLookupTable contains several keys for each resource
+	// (as least 2: absolute and relative paths)
+	NSMutableDictionary * m_resourceLookupTable;
+}
+
 
 - (id) init
 {

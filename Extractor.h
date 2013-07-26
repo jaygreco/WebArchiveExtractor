@@ -14,15 +14,6 @@
 #import <WebKit/WebKit.h>
 
 @interface Extractor : NSObject 
-{
-	WebResource *  m_mainResource;
-	NSMutableSet * m_resources;
-	
-	//in m_resourceLookupTable HTML resource can be stored with relative or 
-	//absolute path m_resourceLookupTable contains several keys for each resource 
-	// (as least 2: absolute and relative paths)
-	NSMutableDictionary * m_resourceLookupTable;
-}
 
 /**
  * load web archive file
