@@ -77,7 +77,7 @@ static NSString* composeEntryPointPath(NSString* packagePath, NSString* indexNam
 }  /* end method */
 
 
--(void) parseWebArchive:(WebArchive *) archiveToParse
+- (void)parseWebArchive:(WebArchive *) archiveToParse
 {
 	/* Added method parseWebArchive to more easily deal with subframeArchives in a looping fashion
 	 - Robert Covington artlythere@kagi.com
@@ -86,21 +86,12 @@ static NSString* composeEntryPointPath(NSString* packagePath, NSString* indexNam
 	m_mainResource = [archiveToParse mainResource];
 	[self addResource:m_mainResource];
 
-	NSArray * subresources = [archiveToParse subresources];
-	if (subresources)
-	{
-		WebResource* resource;
-		int i;
-		for (i=0; i<[subresources count]; i++)
-		{
-			resource = (WebResource*) subresources[i];
-			[self addResource:resource];
-		}
-	}
+	for (WebResource *resource in [archiveToParse subresources])
+		[self addResource:resource];
 }
 
 
--(void) addResource:(WebResource *)resource
+- (void)addResource:(WebResource *)resource
 {
 	[m_resources addObject:resource];
 
