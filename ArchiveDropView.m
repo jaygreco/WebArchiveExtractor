@@ -42,8 +42,9 @@ static void logMessage(NSTextView* log, NSColor* color, NSString* message)
 {
 	NSRect ourBounds = [self bounds];
     NSImage *image = [self image];
+	NSPoint p = { .x = round((ourBounds.size.width - [image size].width) / 2.0), .y = round((ourBounds.size.height - [image size].height) / 2.0) };
     [super drawRect:rect];
-	[image drawAtPoint:ourBounds.origin fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0];
+	[image drawAtPoint:p fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0];
 }
 
 ////////////////////////////////////////////////////////////////
@@ -151,7 +152,7 @@ static void logMessage(NSTextView* log, NSColor* color, NSString* message)
 	
     if ( [pboard canReadObjectForClasses:@[[NSURL class]] options:options] )
 		return NSDragOperationCopy;
-
+    
     return NSDragOperationNone;
 }
 
