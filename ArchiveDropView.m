@@ -24,6 +24,12 @@ static void logMessage(NSTextView* log, NSColor* color, NSString* message)
 	[log displayIfNeeded];
 }
 
+@interface ArchiveDropView ()
+
+@property (assign,getter=isHighlighted)	BOOL	highlighted;
+
+@end
+
 @implementation ArchiveDropView
 
 - (id)initWithFrame:(NSRect)frameRect
@@ -44,7 +50,18 @@ static void logMessage(NSTextView* log, NSColor* color, NSString* message)
     NSImage *image = [self image];
 	NSPoint p = { .x = round((ourBounds.size.width - [image size].width) / 2.0), .y = round((ourBounds.size.height - [image size].height) / 2.0) };
     [super drawRect:rect];
-	[image drawAtPoint:p fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0];
+
+	NSImage *finalImage = image;
+	
+	if (self.highlighted) {
+		finalImage = [image copy];
+		[finalImage lockFocus];
+		[[NSColor colorWithCalibratedWhite:0.0 alpha:0.5] set];
+		NSRectFillUsingOperation(ourBounds, NSCompositeSourceAtop);
+		[finalImage unlockFocus];
+	}
+
+	[finalImage drawAtPoint:p fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0];
 }
 
 ////////////////////////////////////////////////////////////////
@@ -150,18 +167,25 @@ static void logMessage(NSTextView* log, NSColor* color, NSString* message)
 
 	NSDictionary *options = @{ NSPasteboardURLReadingFileURLsOnlyKey: @YES, NSPasteboardURLReadingContentsConformToTypesKey: @[@"com.apple.webarchive"] };
 	
-    if ( [pboard canReadObjectForClasses:@[[NSURL class]] options:options] )
+    if ( [pboard canReadObjectForClasses:@[[NSURL class]] options:options] ) {
+		self.highlighted = YES;
+		[self setNeedsDisplay:YES];
 		return NSDragOperationCopy;
+	}
     
     return NSDragOperationNone;
 }
 
 - (void)draggingExited:(id <NSDraggingInfo>)sender 
 {
+	self.highlighted = NO;
+	[self setNeedsDisplay:YES];
 }
 
 - (void)draggingEnded:(id <NSDraggingInfo>)sender 
 {
+	self.highlighted = NO;
+	[self setNeedsDisplay:YES];
 }
 
 - (BOOL)prepareForDragOperation:(id <NSDraggingInfo>)sender
