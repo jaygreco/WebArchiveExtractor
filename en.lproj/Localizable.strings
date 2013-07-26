@@ -1,0 +1,21 @@
+/* 
+  Localizable.strings
+  WebArchiveExtractor
+
+  Created by Wevah on 2013-07-26.
+
+*/
+
+//Viewable Strings
+"processing" = "Processing %@...";
+"folder exists" = "\tFolder %@ already exists";
+"extract success" = "\tExtracted into %@.\n\tMain resource: %@";
+"not archive" = "\tNot a WebArchive file";
+
+//Encoding Stuff
+"resource encoding is" = "Main resource encoding is %@\n";
+"cannot execute xpath" = "Cannot execute xpath expression\n";
+"cannot write xhtml" = "Cannot write XHTML file %@\n";
+"error code" = "error code %@\n";
+"cannot delete" = "Cannot delete %@\n";
+"cannot create" = "Cannot create %@\n";

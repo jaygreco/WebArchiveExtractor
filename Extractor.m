@@ -147,9 +147,8 @@ static NSString* composeEntryPointPath(NSString* packagePath, NSString* indexNam
 		if (![fm removeItemAtURL:url error:nil])
 		{
 			NSLog(
-				  NSLocalizedStringFromTable(
+				  NSLocalizedString(
 											 @"cannot delete",
-											 @"InfoPlist",
 											 @"cannot delete file - path first param"
 											 ),
 				  [url path]
@@ -161,9 +160,8 @@ static NSString* composeEntryPointPath(NSString* packagePath, NSString* indexNam
 	if (![fm createDirectoryAtURL:url withIntermediateDirectories:YES attributes:nil error:nil])
 	{
 		NSLog(
-			  NSLocalizedStringFromTable(
+			  NSLocalizedString(
 										 @"cannot create",
-										 @"InfoPlist",
 										 @"cannot create file - path first param"
 										 ),
 			  [url path]
@@ -207,7 +205,7 @@ static NSString* composeEntryPointPath(NSString* packagePath, NSString* indexNam
 												   encoding:encoding];
 
 		NSLog(
-			  NSLocalizedStringFromTable(@"resource encoding is", @"InfoPlist", @"Resource encoding"),
+			  NSLocalizedString(@"resource encoding is", @"Resource encoding"),
 			  [resource textEncodingName]
 			  );
 		
@@ -235,9 +233,8 @@ static NSString* composeEntryPointPath(NSString* packagePath, NSString* indexNam
 										   error: &err];
 			if (err) {
 				NSLog(@"%@",
-					  NSLocalizedStringFromTable(
+					  NSLocalizedString(
 												 @"cannot execute xpath",
-												 @"InfoPlist",
 												 @"Xpath execute error"
 												 )
 					  );
@@ -274,9 +271,8 @@ static NSString* composeEntryPointPath(NSString* packagePath, NSString* indexNam
 
 			if (![[doc XMLDataWithOptions:NSXMLDocumentXHTMLKind] writeToURL:fileURLXHtml atomically:NO]) {
 				NSLog(
-					  NSLocalizedStringFromTable(
+					  NSLocalizedString(
 												 @"cannot write xhtml",
-												 @"InfoPlist",
 												 @"xhtml file error"
 												 ),
 					  fileURL
@@ -284,9 +280,8 @@ static NSString* composeEntryPointPath(NSString* packagePath, NSString* indexNam
 			}
 		} else {
 			NSLog(
-				  NSLocalizedStringFromTable(
+				  NSLocalizedString(
 											 @"error code",
-											 @"InfoPlist",
 											 @"extractor error. error code first param"
 											 ),
 				  [[err userInfo] valueForKey:NSLocalizedDescriptionKey]
@@ -295,9 +290,8 @@ static NSString* composeEntryPointPath(NSString* packagePath, NSString* indexNam
 	} else {
 		if (![[resource data] writeToURL:fileURL atomically:NO]) {
 			NSLog(
-				  NSLocalizedStringFromTable(
+				  NSLocalizedString(
 											 @"cannot write xhtml",
-											 @"InfoPlist",
 											 @"xhtml file error"
 											 ),
 				  fileURL

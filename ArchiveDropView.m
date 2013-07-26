@@ -137,7 +137,7 @@ static void logMessage(NSTextView* log, NSColor* color, NSString* message)
 	NSArray *fileURLs = [pboard readObjectsForClasses:@[[NSURL class]] options:options];
 
 	for (NSURL *fileURL in fileURLs) {
-		[self logInfo:[NSString stringWithFormat: NSLocalizedStringFromTable(@"processing", @"InfoPlist", @"processing file: 1 name"), [fileURL path]] ];
+		[self logInfo:[NSString stringWithFormat: NSLocalizedString(@"processing", @"processing file: 1 name"), [fileURL path]] ];
 		
 		NSURL *dirURL = [fileURL URLByDeletingLastPathComponent];
 		NSNumber *isWritable;
@@ -153,7 +153,7 @@ static void logMessage(NSTextView* log, NSColor* color, NSString* message)
 			
 			while([outputURL checkResourceIsReachableAndReturnError:nil])
 			{
-				[self logWarning:[NSString stringWithFormat: NSLocalizedStringFromTable(@"folder exists", @"InfoPlist", @"folder already exists: 1 name"), outputURL] ];
+				[self logWarning:[NSString stringWithFormat: NSLocalizedString(@"folder exists", @"folder already exists: 1 name"), outputURL] ];
 				outputURL  = [dirURL URLByAppendingPathComponent:[NSString stringWithFormat: dirNameFormat, i++]];
 			}
 
@@ -164,7 +164,7 @@ static void logMessage(NSTextView* log, NSColor* color, NSString* message)
 			[extr setURLPrepend: URLPrepend];
 			NSURL *mainResourceURL = [extr extractResourcesToURL:outputURL];
 
-			[self logResult:[NSString stringWithFormat: NSLocalizedStringFromTable(@"extract success", @"InfoPlist", @"extract success 1=folder name 2=main file"), outputURL, [mainResourceURL path]]];
+			[self logResult:[NSString stringWithFormat: NSLocalizedString(@"extract success", @"extract success 1=folder name 2=main file"), outputURL, [mainResourceURL path]]];
 		}
 	}
 	
