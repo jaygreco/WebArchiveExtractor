@@ -231,50 +231,26 @@ extern NSXMLDocumentContentKind WAEXMLDocumentKindFromString(NSString *str) {
 
 }
 
-- (void) outputResource:(WebResource *)resource
-			   fileURL:(NSURL *)fileURL
-			packageURL:(NSURL *)packageURL
+- (void) outputResource:(WebResource *)resource fileURL:(NSURL *)fileURL packageURL:(NSURL *)packageURL
 {
 	if (resource == m_mainResource) {
 		NSStringEncoding encoding = CFStringConvertEncodingToNSStringEncoding(CFStringConvertIANACharSetNameToEncoding((CFStringRef)[m_mainResource textEncodingName]));
 		
-		NSString * source = [[NSString alloc] initWithData:[resource data]
-												   encoding:encoding];
+		NSString * source = [[NSString alloc] initWithData:[resource data] encoding:encoding];
 
-		NSLog(
-			  NSLocalizedString(@"resource encoding is", @"Resource encoding"),
-			  [resource textEncodingName]
-			  );
+		NSLog(NSLocalizedString(@"resource encoding is", @"Resource encoding"), [resource textEncodingName]);
 		
 		NSError * err = nil;
-		NSXMLDocument * doc = [NSXMLDocument alloc];
-		doc = [doc initWithXMLString: source options: NSXMLDocumentTidyHTML error: &err];
-
-		/*
-		 Returns the kind of document content for output.
-		 - (NSXMLDocumentContentKind)documentContentKind
-
-		 Discussion
-		 Most of the differences among content kind have to do with the handling of content-less
-		 tags such as <br>. The valid NSXMLDocumentContentKind constants are
-		 NSXMLDocumentXMLKind, NSXMLDocumentXHTMLKind, NSXMLDocumentHTMLKind,
-		 and NSXMLDocumentTextKind.
-		 */
+		NSXMLDocument *doc = [[NSXMLDocument alloc] initWithXMLString: source options: NSXMLDocumentTidyHTML error:&err];
 		[doc setDocumentContentKind:[self contentKind]];
 
 		if (doc)	{
 			//process images
 			err = nil;
 
-			NSArray* images = [doc nodesForXPath:@"descendant::node()[@src] | descendant::node()[@href]"
-										   error: &err];
+			NSArray* images = [doc nodesForXPath:@"descendant::node()[@src] | descendant::node()[@href]" error:&err];
 			if (err) {
-				NSLog(@"%@",
-					  NSLocalizedString(
-												 @"cannot execute xpath",
-												 @"Xpath execute error"
-												 )
-					  );
+				NSLog(@"%@", NSLocalizedString(@"cannot execute xpath", @"Xpath execute error"));
 			} else {
 				//int i;
 				//for (i = 0; i < [images count]; i++) {
@@ -303,36 +279,16 @@ extern NSXMLDocumentContentKind WAEXMLDocumentKindFromString(NSString *str) {
 			}
 
 			NSURL *fileURLXHtml = [packageURL URLByAppendingPathComponent:[[self entryFileName] length] != 0 ? [self entryFileName]: @"index.html"];
-			[doc setCharacterEncoding: @"UTF-8"];
+			[doc setCharacterEncoding:@"UTF-8"];
 
-			if (![[doc XMLDataWithOptions:NSXMLDocumentXHTMLKind] writeToURL:fileURLXHtml atomically:NO]) {
-				NSLog(
-					  NSLocalizedString(
-												 @"cannot write xhtml",
-												 @"xhtml file error"
-												 ),
-					  fileURL
-					  );
-			}
+			if (![[doc XMLDataWithOptions:NSXMLDocumentXHTMLKind] writeToURL:fileURLXHtml atomically:NO])
+				NSLog(NSLocalizedString(@"cannot write xhtml", @"xhtml file error"), fileURL);
 		} else {
-			NSLog(
-				  NSLocalizedString(
-											 @"error code",
-											 @"extractor error. error code first param"
-											 ),
-				  [[err userInfo] valueForKey:NSLocalizedDescriptionKey]
-				  );
+			NSLog(NSLocalizedString(@"error code", @"extractor error. error code first param"), [err userInfo][NSLocalizedDescriptionKey]);
 		}
 	} else {
-		if (![[resource data] writeToURL:fileURL atomically:NO]) {
-			NSLog(
-				  NSLocalizedString(
-											 @"cannot write xhtml",
-											 @"xhtml file error"
-											 ),
-				  fileURL
-				  );
-		}
+		if (![[resource data] writeToURL:fileURL atomically:NO])
+			NSLog(NSLocalizedString(@"cannot write xhtml", @"xhtml file error"), fileURL);
 	}
 }
 
