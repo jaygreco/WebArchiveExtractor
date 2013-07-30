@@ -102,13 +102,8 @@
 			NSString *archiveName = [[fileURL lastPathComponent] stringByDeletingPathExtension];
 			NSURL *outputURL = [dirURL URLByAppendingPathComponent:archiveName];
 			
-			Extractor * extr = [[Extractor alloc] init];
-			[extr loadWebArchiveAtURL:fileURL];
-			[extr setEntryFileName:indexFileName];
-			[extr setContentKind:type];
-			[extr setURLPrepend:URLPrepend];
-			NSURL *mainResourceURL = [extr extractResourcesToURL:outputURL withUniqueDirectoryName:YES];
-
+			NSURL *mainResourceURL = [Extractor extractWebArchiveAtURL:fileURL entryFileName:indexFileName contentKind:type URLPrepend:URLPrepend];
+			
 			[logController logResult:[NSString stringWithFormat: NSLocalizedString(@"extract success", @"extract success 1=folder name 2=main file"), outputURL, [mainResourceURL path]]];
 		}
 	}
