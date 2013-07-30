@@ -142,8 +142,8 @@ static void logMessage(NSTextView* log, NSColor* color, NSString* message)
 			Extractor * extr = [[Extractor alloc] init];
 			[extr loadWebArchiveAtURL:fileURL];
 			[extr setEntryFileName:indexFileName];
-			[extr setContentKind: type];
-			[extr setURLPrepend: URLPrepend];
+			[extr setContentKind:type];
+			[extr setURLPrepend:URLPrepend];
 			NSURL *mainResourceURL = [extr extractResourcesToURL:outputURL withUniqueDirectoryName:YES];
 
 			[self logResult:[NSString stringWithFormat: NSLocalizedString(@"extract success", @"extract success 1=folder name 2=main file"), outputURL, [mainResourceURL path]]];
