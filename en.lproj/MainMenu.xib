@@ -665,16 +665,16 @@
 									<reference key="NSOnImage" ref="1052808047"/>
 									<reference key="NSMixedImage" ref="166747838"/>
 								</object>
-								<object class="NSMenuItem" id="212231906">
+								<object class="NSMenuItem" id="906229101">
 									<reference key="NSMenu" ref="373584381"/>
-									<string key="NSTitle">Show Log</string>
+									<string key="NSTitle">Log</string>
 									<string key="NSKeyEquiv">l</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="1052808047"/>
 									<reference key="NSMixedImage" ref="166747838"/>
 								</object>
-								<object class="NSMenuItem" id="678341696">
+								<object class="NSMenuItem" id="1066581040">
 									<reference key="NSMenu" ref="373584381"/>
 									<bool key="NSIsDisabled">YES</bool>
 									<bool key="NSIsSeparator">YES</bool>
@@ -1426,7 +1426,7 @@
 					<object class="IBActionConnection" key="connection">
 						<string key="label">showLogWindow:</string>
 						<reference key="source" ref="434133007"/>
-						<reference key="destination" ref="212231906"/>
+						<reference key="destination" ref="906229101"/>
 					</object>
 					<int key="connectionID">503</int>
 				</object>
@@ -1613,8 +1613,8 @@
 							<reference ref="952839381"/>
 							<reference ref="719499992"/>
 							<reference ref="552932116"/>
-							<reference ref="678341696"/>
-							<reference ref="212231906"/>
+							<reference ref="1066581040"/>
+							<reference ref="906229101"/>
 						</array>
 						<reference key="parent" ref="906423058"/>
 					</object>
@@ -2765,12 +2765,12 @@
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">499</int>
-						<reference key="object" ref="678341696"/>
+						<reference key="object" ref="1066581040"/>
 						<reference key="parent" ref="373584381"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">502</int>
-						<reference key="object" ref="212231906"/>
+						<reference key="object" ref="906229101"/>
 						<reference key="parent" ref="373584381"/>
 					</object>
 				</array>
