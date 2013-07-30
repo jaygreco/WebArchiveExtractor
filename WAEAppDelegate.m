@@ -25,9 +25,13 @@
 - (IBAction)openDocument:(id)sender {
 	NSOpenPanel *panel = [NSOpenPanel openPanel];
 	[panel setAllowedFileTypes:@[ @"com.apple.webarchive" ]];
+	[panel setAllowsMultipleSelection:YES];
+	[panel setPrompt:NSLocalizedString(@"Extract", @"Extract")];
+	
 	[panel beginWithCompletionHandler:^(NSInteger result) {
 		if (result == NSFileHandlingPanelOKButton) {
-			[Extractor extractWebArchiveAtURL:[panel URL]];
+			for (NSURL *url in [panel URLs])
+				[Extractor extractWebArchiveAtURL:url];
 		}
 	}];
 }

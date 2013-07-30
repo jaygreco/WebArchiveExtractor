@@ -19,3 +19,5 @@
 "error code" = "error code %@\n";
 "cannot delete" = "Cannot delete %@\n";
 "cannot create" = "Cannot create %@\n";
+
+"Extract" = "Extract";
