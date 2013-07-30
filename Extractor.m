@@ -12,11 +12,6 @@
 
 #import "Extractor.h"
 
-static NSString* composeEntryPointPath(NSString* packagePath, NSString* indexName)
-{
-	return [packagePath stringByAppendingPathComponent:indexName];
-}
-
 extern NSXMLDocumentContentKind WAEXMLDocumentKindFromString(NSString *str) {
 	if ([str isEqualToString:@"HTML"])
 		return NSXMLDocumentHTMLKind;
