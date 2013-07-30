@@ -110,8 +110,6 @@ static void logMessage(NSTextView* log, NSColor* color, NSString* message)
 	
 	//get the user defined index name
 	NSString * indexFileName = [[userDefaults values] valueForKey:@"WAEIndexName"];
-	if (indexFileName == nil || [indexFileName length] == 0)
-		indexFileName = @"index.html";
 	
 	//get the user selected output type
 	//HACK alert. I need to figure out a better way to do this. I thought the User
