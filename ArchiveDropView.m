@@ -118,10 +118,6 @@ static void logMessage(NSTextView* log, NSColor* color, NSString* message)
 	NSXMLDocumentContentKind type = WAEXMLDocumentKindFromString(outputType);
 	
 	NSString * URLPrepend = [[userDefaults values] valueForKey:@"WAEURLOffset"];
-	if (URLPrepend == nil || [URLPrepend length] == 0)
-		URLPrepend = @"";
-	
-	///////////////////////////////////
 	
 	NSDictionary *options = @{ NSPasteboardURLReadingFileURLsOnlyKey: @YES, NSPasteboardURLReadingContentsConformToTypesKey: @[@"com.apple.webarchive"] };
 	NSArray *fileURLs = [pboard readObjectsForClasses:@[[NSURL class]] options:options];
@@ -153,9 +149,6 @@ static void logMessage(NSTextView* log, NSColor* color, NSString* message)
 
 - (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender 
 {
-    //NSDragOperation sourceDragMask;
-	
-    //sourceDragMask = [sender draggingSourceOperationMask];
     NSPasteboard *pboard = [sender draggingPasteboard];
 
 	NSDictionary *options = @{ NSPasteboardURLReadingFileURLsOnlyKey: @YES, NSPasteboardURLReadingContentsConformToTypesKey: @[@"com.apple.webarchive"] };

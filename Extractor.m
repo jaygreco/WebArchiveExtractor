@@ -184,7 +184,7 @@ extern NSXMLDocumentContentKind WAEXMLDocumentKindFromString(NSString *str) {
 	for (WebResource *resource in m_resources)
 		[self extractResource:resource packageURL:url];
 
-	return [url URLByAppendingPathComponent:[self entryFileName] ?: @"index.html"];
+	return [url URLByAppendingPathComponent:[[self entryFileName] length] != 0 ? [self entryFileName] : @"index.html"];
 }
 
 - (NSURL *)extractResourcesToURL:(NSURL *)url {
@@ -275,13 +275,13 @@ extern NSXMLDocumentContentKind WAEXMLDocumentKindFromString(NSString *str) {
 							 ); */
 
 							//[href setObjectValue: [[[res URL] path] substringFromIndex:1] ];
-							[href setObjectValue: [NSString stringWithFormat:@"%@%@", [self URLPrepend], [[[res URL] path] substringFromIndex:1]]];
+							[href setObjectValue: [NSString stringWithFormat:@"%@%@", [self URLPrepend] ?: @"", [[[res URL] path] substringFromIndex:1]]];
 						}
 					}
 				}
 			}
 
-			NSURL *fileURLXHtml = [packageURL URLByAppendingPathComponent:[self entryFileName] ?: @"index.html"];
+			NSURL *fileURLXHtml = [packageURL URLByAppendingPathComponent:[[self entryFileName] length] != 0 ? [self entryFileName]: @"index.html"];
 			[doc setCharacterEncoding: @"UTF-8"];
 
 			if (![[doc XMLDataWithOptions:NSXMLDocumentXHTMLKind] writeToURL:fileURLXHtml atomically:NO]) {
