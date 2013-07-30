@@ -665,7 +665,7 @@
 									<reference key="NSOnImage" ref="1052808047"/>
 									<reference key="NSMixedImage" ref="166747838"/>
 								</object>
-								<object class="NSMenuItem" id="906229101">
+								<object class="NSMenuItem" id="493164446">
 									<reference key="NSMenu" ref="373584381"/>
 									<string key="NSTitle">Log</string>
 									<string key="NSKeyEquiv">l</string>
@@ -674,7 +674,7 @@
 									<reference key="NSOnImage" ref="1052808047"/>
 									<reference key="NSMixedImage" ref="166747838"/>
 								</object>
-								<object class="NSMenuItem" id="1066581040">
+								<object class="NSMenuItem" id="293671883">
 									<reference key="NSMenu" ref="373584381"/>
 									<bool key="NSIsDisabled">YES</bool>
 									<bool key="NSIsSeparator">YES</bool>
@@ -727,9 +727,6 @@
 			</object>
 			<object class="NSCustomObject" id="813488952">
 				<string key="NSClassName">WebArchiveController</string>
-			</object>
-			<object class="NSCustomObject" id="422963877">
-				<string key="NSClassName">MenuDelegate</string>
 			</object>
 			<object class="NSCustomObject" id="1051255371">
 				<string key="NSClassName">SUUpdater</string>
@@ -1426,7 +1423,7 @@
 					<object class="IBActionConnection" key="connection">
 						<string key="label">showLogWindow:</string>
 						<reference key="source" ref="434133007"/>
-						<reference key="destination" ref="906229101"/>
+						<reference key="destination" ref="493164446"/>
 					</object>
 					<int key="connectionID">503</int>
 				</object>
@@ -1613,8 +1610,8 @@
 							<reference ref="952839381"/>
 							<reference ref="719499992"/>
 							<reference ref="552932116"/>
-							<reference ref="1066581040"/>
-							<reference ref="906229101"/>
+							<reference ref="293671883"/>
+							<reference ref="493164446"/>
 						</array>
 						<reference key="parent" ref="906423058"/>
 					</object>
@@ -2011,12 +2008,6 @@
 						<reference key="object" ref="813488952"/>
 						<reference key="parent" ref="0"/>
 						<string key="objectName">WebArchiveController</string>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">285</int>
-						<reference key="object" ref="422963877"/>
-						<reference key="parent" ref="0"/>
-						<string key="objectName">MenuDelegate</string>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">289</int>
@@ -2765,12 +2756,12 @@
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">499</int>
-						<reference key="object" ref="1066581040"/>
+						<reference key="object" ref="293671883"/>
 						<reference key="parent" ref="373584381"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">502</int>
-						<reference key="object" ref="906229101"/>
+						<reference key="object" ref="493164446"/>
 						<reference key="parent" ref="373584381"/>
 					</object>
 				</array>
@@ -2841,7 +2832,6 @@
 				<string key="216.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="23.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="24.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="285.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="289.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="29.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="290.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3025,39 +3015,6 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">./Classes/ArchiveDropView.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">MenuDelegate</string>
-					<string key="superclassName">NSObject</string>
-					<object class="NSMutableDictionary" key="actions">
-						<string key="NS.key.0">toggleLogWindow:</string>
-						<string key="NS.object.0">id</string>
-					</object>
-					<object class="NSMutableDictionary" key="actionInfosByName">
-						<string key="NS.key.0">toggleLogWindow:</string>
-						<object class="IBActionInfo" key="NS.object.0">
-							<string key="name">toggleLogWindow:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-					</object>
-					<dictionary class="NSMutableDictionary" key="outlets">
-						<string key="logMenuItem">NSMenuItem</string>
-						<string key="logWindow">NSPanel</string>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<object class="IBToOneOutletInfo" key="logMenuItem">
-							<string key="name">logMenuItem</string>
-							<string key="candidateClassName">NSMenuItem</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="logWindow">
-							<string key="name">logWindow</string>
-							<string key="candidateClassName">NSPanel</string>
-						</object>
-					</dictionary>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/MenuDelegate.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
