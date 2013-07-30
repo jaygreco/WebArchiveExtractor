@@ -8,6 +8,7 @@
 
 #import "WAEAppDelegate.h"
 #import "Extractor.h"
+#import "WAELogWindowController.h"
 
 @implementation WAEAppDelegate
 
@@ -15,6 +16,10 @@
 	Extractor *extractor = [[Extractor alloc] init];
 	[extractor loadWebArchiveAtURL:[NSURL fileURLWithPath:filename]];
 	return YES;
+}
+
+- (IBAction)showLogWindow:(id)sender {
+	[[WAELogWindowController sharedController] showWindow:sender];
 }
 
 @end

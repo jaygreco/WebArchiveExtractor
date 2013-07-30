@@ -16,11 +16,6 @@
 	IBOutlet NSUserDefaultsController *userDefaults;
 }
 
-- (void)logError:(NSString *)message;
-- (void)logWarning:(NSString *)message;
-- (void)logInfo:(NSString *)message;
-- (void)logResult:(NSString *)message;
-
 @property (copy)	NSImage	*image;
 
 @end

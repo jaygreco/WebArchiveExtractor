@@ -10,4 +10,6 @@
 
 @interface WAEAppDelegate : NSObject <NSApplicationDelegate>
 
+- (IBAction)showLogWindow:(id)sender;
+
 @end

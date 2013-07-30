@@ -10,19 +10,8 @@
 #import "ArchiveDropView.h"
 #import "Extractor.h"
 #import "OutputType.h"
+#import "WAELogWindowController.h"
 
-static void logMessage(NSTextView* log, NSColor* color, NSString* message)
-{
-	[log setEditable:YES];
-	
-	NSMutableDictionary* dict = [NSMutableDictionary dictionaryWithDictionary: [log typingAttributes]];
-	[dict setValue:color forKey:NSForegroundColorAttributeName];
-	[log setTypingAttributes:dict];
-	[log insertText: message ];
-	[log insertText: @"\n" ];
-	[log setEditable:NO];
-	[log displayIfNeeded];
-}
 
 @interface ArchiveDropView ()
 
@@ -77,28 +66,6 @@ static void logMessage(NSTextView* log, NSColor* color, NSString* message)
 	[finalImage drawAtPoint:p fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0];
 }
 
-////////////////////////////////////////////////////////////////
-
-- (void)logError:(NSString*) message
-{
-	logMessage(logOutput, [NSColor redColor], message);
-}
-
-- (void)logWarning:(NSString*) message
-{
-	logMessage(logOutput, [NSColor orangeColor], message);
-}
-
-- (void)logInfo:(NSString*) message
-{
-	logMessage(logOutput, [NSColor blueColor], message);
-}
-
-- (void)logResult:(NSString*) message
-{
-	logMessage(logOutput, [NSColor darkGrayColor], message);
-}
-
 - (BOOL)performDragOperation:(id <NSDraggingInfo>)sender
 {
 	[logOutput selectAll:self];
@@ -122,8 +89,10 @@ static void logMessage(NSTextView* log, NSColor* color, NSString* message)
 	NSDictionary *options = @{ NSPasteboardURLReadingFileURLsOnlyKey: @YES, NSPasteboardURLReadingContentsConformToTypesKey: @[@"com.apple.webarchive"] };
 	NSArray *fileURLs = [pboard readObjectsForClasses:@[[NSURL class]] options:options];
 
+	WAELogWindowController *logController = [WAELogWindowController sharedController];
+
 	for (NSURL *fileURL in fileURLs) {
-		[self logInfo:[NSString stringWithFormat: NSLocalizedString(@"processing", @"processing file: 1 name"), [fileURL path]] ];
+		[logController logInfo:[NSString stringWithFormat: NSLocalizedString(@"processing", @"processing file: 1 name"), [fileURL path]] ];
 		
 		NSURL *dirURL = [fileURL URLByDeletingLastPathComponent];
 		NSNumber *isWritable;
@@ -140,7 +109,7 @@ static void logMessage(NSTextView* log, NSColor* color, NSString* message)
 			[extr setURLPrepend:URLPrepend];
 			NSURL *mainResourceURL = [extr extractResourcesToURL:outputURL withUniqueDirectoryName:YES];
 
-			[self logResult:[NSString stringWithFormat: NSLocalizedString(@"extract success", @"extract success 1=folder name 2=main file"), outputURL, [mainResourceURL path]]];
+			[logController logResult:[NSString stringWithFormat: NSLocalizedString(@"extract success", @"extract success 1=folder name 2=main file"), outputURL, [mainResourceURL path]]];
 		}
 	}
 	
