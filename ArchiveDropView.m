@@ -70,22 +70,8 @@
 {
 	[logOutput selectAll:self];
 	[logOutput insertText:@""];
-    NSPasteboard *pboard = [sender draggingPasteboard];
-	
-	///////////////////////////////////
-	// This probably shouldn't be here
-	
-	//get the user defined index name
-	NSString * indexFileName = [[userDefaults values] valueForKey:@"WAEIndexName"];
-	
-	//get the user selected output type
-	//HACK alert. I need to figure out a better way to do this. I thought the User
-	//types from the select box would get an object, but it only returns a string :-/
-	NSString *outputType = [[userDefaults values] valueForKey:@"WAEOutputType"];
-	NSXMLDocumentContentKind type = WAEXMLDocumentKindFromString(outputType);
-	
-	NSString * URLPrepend = [[userDefaults values] valueForKey:@"WAEURLOffset"];
-	
+    NSPasteboard *pboard = [sender draggingPasteboard];	
+
 	NSDictionary *options = @{ NSPasteboardURLReadingFileURLsOnlyKey: @YES, NSPasteboardURLReadingContentsConformToTypesKey: @[@"com.apple.webarchive"] };
 	NSArray *fileURLs = [pboard readObjectsForClasses:@[[NSURL class]] options:options];
 
@@ -97,14 +83,11 @@
 		NSURL *dirURL = [fileURL URLByDeletingLastPathComponent];
 		NSNumber *isWritable;
 		[dirURL getResourceValue:&isWritable forKey:NSURLIsWritableKey error:nil];
-
-		if ([isWritable boolValue]) {
-			NSString *archiveName = [[fileURL lastPathComponent] stringByDeletingPathExtension];
-			NSURL *outputURL = [dirURL URLByAppendingPathComponent:archiveName];
+		
+		if ([isWritable boolValue]) {			
+			NSURL *mainResourceURL = [Extractor extractWebArchiveAtURL:fileURL];
 			
-			NSURL *mainResourceURL = [Extractor extractWebArchiveAtURL:fileURL entryFileName:indexFileName contentKind:type URLPrepend:URLPrepend];
-			
-			[logController logResult:[NSString stringWithFormat: NSLocalizedString(@"extract success", @"extract success 1=folder name 2=main file"), outputURL, [mainResourceURL path]]];
+			[logController logResult:[NSString stringWithFormat: NSLocalizedString(@"extract success", @"extract success 1=folder name 2=main file"), [[mainResourceURL path] stringByDeletingLastPathComponent], [mainResourceURL path]]];
 		}
 	}
 	

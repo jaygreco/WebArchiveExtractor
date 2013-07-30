@@ -18,6 +18,7 @@ extern NSXMLDocumentContentKind WAEXMLDocumentKindFromString(NSString *str);
 @interface Extractor : NSObject 
 
 + (NSURL *)extractWebArchiveAtURL:(NSURL *)webArchiveURL entryFileName:(NSString *)entryName contentKind:(NSXMLDocumentContentKind)contentKind URLPrepend:(NSString *)URLPrepend;
++ (NSURL *)extractWebArchiveAtURL:(NSURL *)webArchiveURL;
 
 // load web archive file
 - (void)loadWebArchiveAtURL:(NSURL *)webArchiveURL;

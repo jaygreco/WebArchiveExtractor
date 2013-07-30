@@ -95,6 +95,16 @@ extern NSXMLDocumentContentKind WAEXMLDocumentKindFromString(NSString *str) {
 	return [extractor extractResourcesToURL:directoryURL withUniqueDirectoryName:YES];
 }
 
++ (NSURL *)extractWebArchiveAtURL:(NSURL *)webArchiveURL {
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	NSString *indexFileName = [defaults stringForKey:@"WAEIndexName"];
+	NSString *outputType = [defaults stringForKey:@"WAEOutputType"];
+	NSXMLDocumentContentKind type = WAEXMLDocumentKindFromString(outputType);
+	NSString *URLPrepend = [defaults stringForKey:@"WAEURLOffset"];
+
+	return [self extractWebArchiveAtURL:webArchiveURL entryFileName:indexFileName contentKind:type URLPrepend:URLPrepend];
+}
+
 - (void)loadWebArchiveAtURL:(NSURL *)webArchiveURL {
 	[m_resources removeAllObjects];
 	[m_resourceLookupTable removeAllObjects];
