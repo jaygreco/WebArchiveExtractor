@@ -50,7 +50,10 @@
 	}
 
     NSImage *image = [self image];
-	NSPoint p = { .x = round((bounds.size.width - [image size].width) / 2.0), .y = round((bounds.size.height - [image size].height) / 2.0) };
+	NSPoint p = {
+		.x = round((bounds.size.width - [image size].width) / 2.0),
+		.y = round((bounds.size.height - [image size].height) / 2.0)
+	};
     [super drawRect:rect];
 
 	NSImage *finalImage = image;
@@ -74,9 +77,9 @@
 
 	NSDictionary *options = @{ NSPasteboardURLReadingFileURLsOnlyKey: @YES, NSPasteboardURLReadingContentsConformToTypesKey: @[@"com.apple.webarchive"] };
 	NSArray *fileURLs = [pboard readObjectsForClasses:@[[NSURL class]] options:options];
-
+	
 	WAELogWindowController *logController = [WAELogWindowController sharedController];
-
+	
 	for (NSURL *fileURL in fileURLs) {
 		[logController logInfo:[NSString stringWithFormat: NSLocalizedString(@"processing", @"processing file: 1 name"), [fileURL path]] ];
 		
