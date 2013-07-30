@@ -101,7 +101,7 @@ extern NSXMLDocumentContentKind WAEXMLDocumentKindFromString(NSString *str) {
 	NSString *outputType = [defaults stringForKey:@"WAEOutputType"];
 	NSXMLDocumentContentKind type = WAEXMLDocumentKindFromString(outputType);
 	NSString *URLPrepend = [defaults stringForKey:@"WAEURLOffset"];
-
+	
 	return [self extractWebArchiveAtURL:webArchiveURL entryFileName:indexFileName contentKind:type URLPrepend:URLPrepend];
 }
 
