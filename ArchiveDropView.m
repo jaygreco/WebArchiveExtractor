@@ -26,7 +26,7 @@
 {
 	if ((self = [super initWithFrame:frameRect])) {
 		// Add initialization code here
-		[self registerForDraggedTypes:@[NSFilenamesPboardType]];
+		[self registerForDraggedTypes:@[(NSString *)kUTTypeFileURL]];
 		
 		//set the drop target image
 		[self setImage:[NSImage imageNamed:@"extract_archive"]];
