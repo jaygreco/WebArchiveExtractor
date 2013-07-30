@@ -13,6 +13,8 @@
 #import <Cocoa/Cocoa.h>
 #import <WebKit/WebKit.h>
 
+extern NSXMLDocumentContentKind WAEXMLDocumentKindFromString(NSString *str);
+
 @interface Extractor : NSObject 
 
 //+ (void)extractWebArchiveAtURL:(NSURL *)webArchiveURL toURL:(NSURL *)url;
@@ -22,10 +24,11 @@
 - (void)loadWebArchiveAtURL:(NSURL *)webArchiveURL;
 
 // extract to directory
+- (NSURL *)extractResourcesToURL:(NSURL *)url withUniqueDirectoryName:(BOOL)uniqueName;
 - (NSURL *)extractResourcesToURL:(NSURL *)url;
 
 @property (copy)	NSString	*entryFileName;
-@property (assign)	int			contentKind;
+@property (assign)	NSXMLDocumentContentKind contentKind;
 @property (copy)	NSString	*URLPrepend;
 
 @end

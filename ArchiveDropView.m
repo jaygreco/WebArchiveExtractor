@@ -116,21 +116,13 @@ static void logMessage(NSTextView* log, NSColor* color, NSString* message)
 	//get the user selected output type
 	//HACK alert. I need to figure out a better way to do this. I thought the User
 	//types from the select box would get an object, but it only returns a string :-/
-	NSString * outputType = [[userDefaults values] valueForKey:@"WAEOutputType"];
-	int type = NSXMLDocumentXHTMLKind;
-	if ( [outputType isEqualToString:@"HTML"] )
-		type = NSXMLDocumentHTMLKind;
-	else if ( [outputType isEqualToString:@"XML"] )
-		type = NSXMLDocumentXMLKind;
-	else if ( [outputType isEqualToString:@"XHTML"] )
-		type = NSXMLDocumentXHTMLKind;
-	else if ( [outputType isEqualToString:@"Text"] )
-		type = NSXMLDocumentTextKind;
+	NSString *outputType = [[userDefaults values] valueForKey:@"WAEOutputType"];
+	NSXMLDocumentContentKind type = WAEXMLDocumentKindFromString(outputType);
 	
 	NSString * URLPrepend = [[userDefaults values] valueForKey:@"WAEURLOffset"];
-	if (URLPrepend == nil || [URLPrepend length] == 0) {
+	if (URLPrepend == nil || [URLPrepend length] == 0)
 		URLPrepend = @"";
-	}
+	
 	///////////////////////////////////
 	
 	NSDictionary *options = @{ NSPasteboardURLReadingFileURLsOnlyKey: @YES, NSPasteboardURLReadingContentsConformToTypesKey: @[@"com.apple.webarchive"] };
@@ -143,26 +135,16 @@ static void logMessage(NSTextView* log, NSColor* color, NSString* message)
 		NSNumber *isWritable;
 		[dirURL getResourceValue:&isWritable forKey:NSURLIsWritableKey error:nil];
 
-		if ([isWritable boolValue])
-		{
+		if ([isWritable boolValue]) {
 			NSString *archiveName = [[fileURL lastPathComponent] stringByDeletingPathExtension];
 			NSURL *outputURL = [dirURL URLByAppendingPathComponent:archiveName];
 			
-			NSUInteger i = 0;
-			NSString *dirNameFormat = [archiveName stringByAppendingString:@"-%ld"];
-			
-			while([outputURL checkResourceIsReachableAndReturnError:nil])
-			{
-				[self logWarning:[NSString stringWithFormat: NSLocalizedString(@"folder exists", @"folder already exists: 1 name"), outputURL] ];
-				outputURL  = [dirURL URLByAppendingPathComponent:[NSString stringWithFormat: dirNameFormat, i++]];
-			}
-
 			Extractor * extr = [[Extractor alloc] init];
 			[extr loadWebArchiveAtURL:fileURL];
 			[extr setEntryFileName:indexFileName];
 			[extr setContentKind: type];
 			[extr setURLPrepend: URLPrepend];
-			NSURL *mainResourceURL = [extr extractResourcesToURL:outputURL];
+			NSURL *mainResourceURL = [extr extractResourcesToURL:outputURL withUniqueDirectoryName:YES];
 
 			[self logResult:[NSString stringWithFormat: NSLocalizedString(@"extract success", @"extract success 1=folder name 2=main file"), outputURL, [mainResourceURL path]]];
 		}

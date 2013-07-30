@@ -17,6 +17,19 @@ static NSString* composeEntryPointPath(NSString* packagePath, NSString* indexNam
 	return [packagePath stringByAppendingPathComponent:indexName];
 }
 
+extern NSXMLDocumentContentKind WAEXMLDocumentKindFromString(NSString *str) {
+	if ([str isEqualToString:@"HTML"])
+		return NSXMLDocumentHTMLKind;
+	else if ([str isEqualToString:@"XML"])
+		return NSXMLDocumentXMLKind;
+	else if ([str isEqualToString:@"XHTML"])
+		return NSXMLDocumentXHTMLKind;
+	else if ([str isEqualToString:@"Text"])
+		return NSXMLDocumentTextKind;
+
+	return NSXMLDocumentXHTMLKind;
+}
+
 @interface Extractor ()
 
 /**
@@ -138,34 +151,33 @@ static NSString* composeEntryPointPath(NSString* packagePath, NSString* indexNam
 	}
 }
 
-- (NSURL *)extractResourcesToURL:(NSURL *)url {
+- (NSURL *)extractResourcesToURL:(NSURL *)url withUniqueDirectoryName:(BOOL)uniqueName {
 	NSFileManager * fm = [NSFileManager defaultManager];
+
+	if (uniqueName) {
+		NSURL *dirURL = [url URLByDeletingLastPathComponent];
+		NSString *archiveName = [url lastPathComponent];
+
+		NSUInteger i = 0;
+		NSString *dirNameFormat = [archiveName stringByAppendingString:@"-%ld"];
+
+		while ([url checkResourceIsReachableAndReturnError:nil]) {
+			//[self logWarning:[NSString stringWithFormat:NSLocalizedString(@"folder exists", @"folder already exists: 1 name"), url] ];
+			url  = [dirURL URLByAppendingPathComponent:[NSString stringWithFormat: dirNameFormat, i++]];
+		}
+	}
+
 	NSNumber *isDirectory;
-	
-	if ([url checkResourceIsReachableAndReturnError:nil] && [url getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:nil] && [isDirectory boolValue])
-	{
-		if (![fm removeItemAtURL:url error:nil])
-		{
-			NSLog(
-				  NSLocalizedString(
-											 @"cannot delete",
-											 @"cannot delete file - path first param"
-											 ),
-				  [url path]
-				  );
+
+	if ([url checkResourceIsReachableAndReturnError:nil] && [url getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:nil] && [isDirectory boolValue]) {
+		if (![fm removeItemAtURL:url error:nil]) {
+			NSLog(NSLocalizedString(@"cannot delete", @"cannot delete file - path first param"), [url path]);
 			return nil;
 		}
 	}
 
-	if (![fm createDirectoryAtURL:url withIntermediateDirectories:YES attributes:nil error:nil])
-	{
-		NSLog(
-			  NSLocalizedString(
-										 @"cannot create",
-										 @"cannot create file - path first param"
-										 ),
-			  [url path]
-			  );
+	if (![fm createDirectoryAtURL:url withIntermediateDirectories:YES attributes:nil error:nil]) {
+		NSLog(NSLocalizedString(@"cannot create", @"cannot create file - path first param"), [url path]);
 		return nil;
 	}
 
@@ -173,6 +185,10 @@ static NSString* composeEntryPointPath(NSString* packagePath, NSString* indexNam
 		[self extractResource:resource packageURL:url];
 
 	return [url URLByAppendingPathComponent:[self entryFileName]];
+}
+
+- (NSURL *)extractResourcesToURL:(NSURL *)url {
+	return [self extractResourcesToURL:url withUniqueDirectoryName:NO];
 }
 
 - (void) extractResource:(WebResource *)resource packageURL:(NSURL *)packageURL

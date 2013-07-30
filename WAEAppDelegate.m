@@ -7,11 +7,13 @@
 //
 
 #import "WAEAppDelegate.h"
+#import "Extractor.h"
 
 @implementation WAEAppDelegate
 
 - (BOOL)application:(NSApplication *)sender openFile:(NSString *)filename {
-	NSLog(@"do something with webarchive here");
+	Extractor *extractor = [[Extractor alloc] init];
+	[extractor loadWebArchiveAtURL:[NSURL fileURLWithPath:filename]];
 	return YES;
 }
 
