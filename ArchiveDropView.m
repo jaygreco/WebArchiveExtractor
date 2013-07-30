@@ -26,7 +26,7 @@
 {
 	if ((self = [super initWithFrame:frameRect])) {
 		// Add initialization code here
-		[self registerForDraggedTypes:@[(NSString *)kUTTypeFileURL]];
+		[self registerForDraggedTypes:@[(id)kUTTypeFileURL]];
 		
 		//set the drop target image
 		[self setImage:[NSImage imageNamed:@"extract_archive"]];
@@ -75,7 +75,7 @@
 	[logOutput insertText:@""];
     NSPasteboard *pboard = [sender draggingPasteboard];	
 
-	NSDictionary *options = @{ NSPasteboardURLReadingFileURLsOnlyKey: @YES, NSPasteboardURLReadingContentsConformToTypesKey: @[@"com.apple.webarchive"] };
+	NSDictionary *options = @{ NSPasteboardURLReadingFileURLsOnlyKey: @YES, NSPasteboardURLReadingContentsConformToTypesKey: @[(id)kUTTypeWebArchive] };
 	NSArray *fileURLs = [pboard readObjectsForClasses:@[[NSURL class]] options:options];
 	
 	WAELogWindowController *logController = [WAELogWindowController sharedController];
@@ -101,7 +101,7 @@
 {
     NSPasteboard *pboard = [sender draggingPasteboard];
 
-	NSDictionary *options = @{ NSPasteboardURLReadingFileURLsOnlyKey: @YES, NSPasteboardURLReadingContentsConformToTypesKey: @[@"com.apple.webarchive"] };
+	NSDictionary *options = @{ NSPasteboardURLReadingFileURLsOnlyKey: @YES, NSPasteboardURLReadingContentsConformToTypesKey: @[(id)kUTTypeWebArchive] };
 	
     if ( [pboard canReadObjectForClasses:@[[NSURL class]] options:options] ) {
 		self.highlighted = YES;

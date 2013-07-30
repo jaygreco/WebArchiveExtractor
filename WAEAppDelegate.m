@@ -24,7 +24,7 @@
 
 - (IBAction)openDocument:(id)sender {
 	NSOpenPanel *panel = [NSOpenPanel openPanel];
-	[panel setAllowedFileTypes:@[ @"com.apple.webarchive" ]];
+	[panel setAllowedFileTypes:@[(id)kUTTypeWebArchive]];
 	[panel setAllowsMultipleSelection:YES];
 	[panel setPrompt:NSLocalizedString(@"Extract", @"Extract")];
 	
